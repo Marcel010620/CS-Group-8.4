@@ -1,1 +1,3 @@
-Test 121
+print(1212)
+
+Test
