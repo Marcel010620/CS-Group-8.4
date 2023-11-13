@@ -1,10 +1,14 @@
+!pip install python-barcode
+!pip install streamlit
+
+
 from datetime import datetime, timedelta
 import barcode
 from barcode.writer import ImageWriter
 
 today = datetime.now().date()
-Article = input("Please select the Article")
-Owner = input("Please select the owner of the product")
+Article = "Pepper"#input("Please select the Article")
+Owner = "A"#input("Please select the owner of the product")
 
 if Article == "Pepper": 
     Product_Code = "01"
@@ -34,7 +38,9 @@ print (Article_Code)
 
 def generate_barcode(data):
     barcode_code128 = barcode.get("code128", data, writer=ImageWriter())
-    filename = barcode_code128.save(f"{Article}_barcode")
+    filename = (f"{Article}_barcode")
+    barcode_code128.save(filename)
+    st.image (filename, caption=f"Generated Barcode", use_column_width=True)
     print(f"Barcode saved as {filename}")
 
 #Number = Nr. Class + Due Date + Ownership + Nutritions 
