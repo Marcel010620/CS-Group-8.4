@@ -4,3 +4,20 @@
 by token-metric, each API request has given amount of units (tokens) which are used to calculate payment to openai)
 
 Code:
+import openai
+
+openai.api_key = "Insert API-Key here"
+
+
+response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=
+                    [
+                    {"role": "system", "content": 'You are a cook giving a recipe with any given ingredients.'},
+                    {"role": "user", "content": 'Give a recipe using all ingredients in a given list of food items'}
+                    ]
+        )
+            
+print(response.choices[0].message.content)
+
+            
