@@ -1,5 +1,3 @@
-pip install streamlit
-
 import qrcode
 
 qr = qrcode.QRCode(
