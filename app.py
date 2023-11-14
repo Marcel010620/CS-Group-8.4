@@ -1,6 +1,3 @@
-import qrcode
-from PIL import Image
-
 class QRCodeGenerator:
     def __init__(self, data):
         self.data = data
@@ -13,6 +10,3 @@ class QRCodeGenerator:
         img = qr.make_image(fill_color="black", back_color="white")
         img.save(filename)
 
-if __name__ == "__main__":
-    qr_code_generator = QRCodeGenerator("https://www.google.com")
-    qr_code_generator.generate_qr_code("google_qr_code.png")
