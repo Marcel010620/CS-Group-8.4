@@ -9,6 +9,8 @@ options_Owner = ["A", "B", "C"]
 selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
 st.write("You selected", selected_option_Owner)
 
+st.experimental_rerun()
+
 today = datetime.now().date()
 
 if selected_option_Article == "Pepper": 
