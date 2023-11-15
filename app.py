@@ -39,6 +39,7 @@ if st.button('Reload your Article Code'):
     # This will force the Streamlit app to rerun
     st.experimental_rerun()
 
+st.write(Test)
 st.write(Article_Code)
 
 from datetime import datetime, timedelta
