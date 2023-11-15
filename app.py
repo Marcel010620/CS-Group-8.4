@@ -5,7 +5,6 @@ options_Article = ["Pepper", "Milk"]
 selected_option_Article = st.selectbox("Choose your Article", options_Article)
 st.write('You selected:', selected_option_Article)
 
-st.write("Test")
 options_Owner = ["A", "B", "C"]
 selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
 st.write("You selected", selected_option_Owner)
