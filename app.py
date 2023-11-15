@@ -40,3 +40,24 @@ if st.button('Reload your Article Code'):
     st.experimental_rerun()
 
 st.write(Article_Code)
+
+from datetime import datetime, timedelta
+def decode_product_code(article_Code):
+    product_number = article_Code[:2]
+    expiration_date = article_Code[2:10]
+    calories = article_Code[10:14]
+    product_owner = article_Code[14:]
+
+    product_number = int(product_number)
+    
+    expiration_date = (datetime.strptime(expiration_date,"%d%m%Y")).strftime("%d.%m.%Y")
+    calories = calories.lstrip("0")
+    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
+
+    return {
+        "Product Number": product_number,
+        "Expiration Date": expiration_date,
+        "Calories": calories,
+        "Product Owner": product_owner}
+
+st.write(decode_product_code(Article_Code))
