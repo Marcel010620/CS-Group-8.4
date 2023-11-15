@@ -62,5 +62,3 @@ def decode_product_code(article_Code):
 
 st.write(decode_product_code(Article_Code))
 
-
-st.image(Article_Code)
