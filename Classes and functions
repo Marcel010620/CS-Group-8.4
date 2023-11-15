@@ -15,13 +15,11 @@ Check traffic
 Check retail_source
 
 
-
 def check_ownership (product, owner)
 
 fridge.check_owner(product)
 
 def check_status_fridge(products, owners, expiry date, stock)
-
 
 
 def check_expiry(product, date expiry)
