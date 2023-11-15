@@ -26,7 +26,7 @@ def dict_to_qr_code(dict_data):
 
     return img
 
-def decode_product_code(article_code):
+def decode_product_code(Article_Code):
     # This function is a placeholder and should be replaced with your actual decoding function
     product_number = "12345"
     expiration_date = "2023-01-01"
@@ -39,7 +39,9 @@ def decode_product_code(article_code):
         "Calories": calories,
         "Product Owner": product_owner}
 
+
 decoded_data = decode_product_code(Article_Code)
+st.write(decode_product_code(Article_Code))
 qr_code_img = dict_to_qr_code(decoded_data)
 
 # Convert QR Code image to a Streamlit-compatible format
