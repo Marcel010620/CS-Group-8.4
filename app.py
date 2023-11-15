@@ -37,7 +37,6 @@ if selected_option_Article == "Milk":
 
 if st.button('Reload your Article Code'):
     # This will force the Streamlit app to rerun
-    st.caching.clear_cache()
     st.experimental_rerun()
 
 st.write(Article_Code)
