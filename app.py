@@ -1,3 +1,4 @@
+%pip install streamlit
 import streamlit as st
 options = ["Pepper", "Milk"]
 selected_option = st.selectbox("Choose your Article", options)
