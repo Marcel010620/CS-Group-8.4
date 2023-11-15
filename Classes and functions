@@ -1,0 +1,39 @@
+Classes and functions:
+
+Product classes: 
+Parent class dairy, sub class yoghurt, sub class milk, sub class cheese
+Parent class fruit, sub class apple, sub class orange 
+Parent class vegetable, sub class 
+Parent class meat
+
+Functions 
+Check ownership
+Check status/overview
+Check date of expiry
+Check nutritional values 
+Check traffic
+Check retail_source
+
+
+
+def check_ownership (product, owner)
+
+fridge.check_owner(product)
+
+def check_status_fridge(products, owners, expiry date, stock)
+
+
+
+def check_expiry(product, date expiry)
+
+
+
+def check_nutritional_value(product, nutritional_value)
+
+
+
+def check_traffic(fridge, products, movement)
+
+
+
+def check_source(product, retail_source)
