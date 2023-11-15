@@ -62,8 +62,4 @@ def decode_product_code(article_Code):
 
 st.write(decode_product_code(Article_Code))
 
-text = Article_Code
-qr = pyqrcode.create(text)
-qr.png("qrcode.png",scale=2) 
-qr.show(text)
 
