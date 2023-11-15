@@ -65,4 +65,4 @@ st.write(decode_product_code(Article_Code))
 
 
 # Display QR Code image
-st.image
+st.qrcode
