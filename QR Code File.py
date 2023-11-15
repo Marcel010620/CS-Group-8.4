@@ -3,7 +3,6 @@ from PIL import Image
 import json
 import base64
 import io
-import streamlit as st
 
 import streamlit as st
 from datetime import datetime, timedelta
@@ -70,10 +69,33 @@ def decode_product_code(article_Code):
 st.write(decode_product_code(Article_Code))
 
 
+import qrcode
+from PIL import Image
 
+def dict_to_qr_code(data):
+    # Convert dictionary to string
+    data_str = json.dumps(data)
+
+    # Create QR Code from string
+    qr = qrcode.QRCode()
+    qr.add_data(data_str)
+    qr.make()
+
+    # Convert QR Code to an image
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    return img
+
+import base64
+import io
+
+# ...
+
+buffered = io.BytesIO()
+qr_code_img.save(buffered, format="PNG")
+img_str = base64.b64encode(buffered.getvalue()).decode()
 
 
 # Display QR Code image
-st.image
-
+st.image(img_str)
 
