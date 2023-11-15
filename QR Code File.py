@@ -39,15 +39,11 @@ def decode_product_code(Article_Code):
         "Calories": calories,
         "Product Owner": product_owner}
 
-
-decoded_data = decode_product_code(Article_Code)
 st.write(decode_product_code(Article_Code))
-qr_code_img = dict_to_qr_code(decoded_data)
 
-# Convert QR Code image to a Streamlit-compatible format
-buffered = io.BytesIO()
-qr_code_img.save(buffered, format="PNG")
-img_str = base64.b64encode(buffered.getvalue()).decode()
+
 
 # Display QR Code image
-st.image(img_str)
+st.image
+
+
