@@ -9,8 +9,6 @@ options_Owner = ["A", "B", "C"]
 selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
 st.write("You selected", selected_option_Owner)
 
-st.experimental_rerun()
-
 today = datetime.now().date()
 
 if selected_option_Article == "Pepper": 
@@ -36,5 +34,10 @@ if selected_option_Article == "Milk":
     elif selected_option_Owner == "C":
         Owner_Nr = "03"
     Article_Code = str(Product_Code+Expiring_Date+calories+Owner_Nr)
+
+if st.button('Reload your Article Code'):
+    # This will force the Streamlit app to rerun
+    st.caching.clear_cache()
+    st.experimental_rerun()
 
 st.write(Article_Code)
