@@ -1,12 +1,15 @@
 import streamlit as st
 from datetime import datetime, timedelta
 
-# Initialize an empty list to store owners
-owners_list = []
+reset_owner_button = st.button("Reset Owners")
+
+if reset_owner_button: 
+    owners_list = []
 
 add_owner_button = st.button("Add Owner")
 
 if add_owner_button:
+    owners_list = []
     owner_name = st.text_input("Enter Owner Nr1.")
 
     if owner_name:
