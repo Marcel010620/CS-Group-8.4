@@ -1,10 +1,10 @@
 import streamlit as st
 from datetime import datetime, timedelta
 
-st.button ("Reset Owner")
-if st.button("Reset Owner"):
-    Owner = []
-    Owner.append(str(st.text_input("Owner Nr.1")))
+add_owner_button = st.button ("Add Owner")
+if add_owner_button: 
+    Owner = st.text_input("Enter Owner Nr1.", "")
+
 
 
 
