@@ -1,10 +1,10 @@
 import streamlit as st
 from datetime import datetime, timedelta
-
-add_owner_button = st.button("Add owners here")
-remove_owner_button = st.button("Which Owner would you like to remove")
-add_item_button = st.button("Add an item to re fridge")
-remove_item_button = st.button("remove an item from the fridge")
+col1, col2, col3, col4 = st.columns(4)
+add_owner_button = col1.button("Add owners here")
+remove_owner_button = col2.button("Which Owner would you like to remove")
+add_item_button = col3.button("Add an item to re fridge")
+remove_item_button = col4.button("remove an item from the fridge")
 
 st.write(add_item_button,remove_item_button,add_owner_button,remove_owner_button)
 
