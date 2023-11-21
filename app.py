@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime, timedelta
 wg_name = st.text_input("Your WG name")
+
 st.title(f"his is the smart refrigerator of: {wg_name}")
 
 add_owner_button = st.button("Add Owner")
