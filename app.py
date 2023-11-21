@@ -27,18 +27,14 @@ remove_owner_button = col4.button("remove owner")
 
 #What happens if you press the add_item_button
 if add_item_button:
-    st.session_state.state.add_item_button_pressed = True
-
-# Display selectboxes only if add_item_button is pressed
-if st.session_state.state.add_item_button_pressed:
     options_Article = ["Pepper", "Milk"]
-    st.session_state.state.selected_option_Article = st.selectbox("Choose your Article", options_Article,
-                                                                  key="selected_option_Article")
-    st.write('You selected:', st.session_state.state.selected_option_Article)
+    selected_option_Article = st.selectbox("Choose your Article", options_Article)
+    st.write('You selected:', selected_option_Article)
 
     options_Owner = ["A", "B", "C"]
-    st.session_state.state.selected_option_Owner = st.selectbox("Choose the Owner", options_Owner,
-                                                                key="selected_option_Owner")
+    selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
+    st.write("You selected", selected_option_Owner)
+
 #What happens if you press the remove_item_buttonv
 if remove_item_button:
     remove_options_article = ["Pepper", "Milk"] #this needs to be a list with all Procuts inside the fridge
