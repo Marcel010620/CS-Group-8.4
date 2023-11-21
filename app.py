@@ -11,9 +11,7 @@ add_owner_button = st.button("Add Owner")
 if add_owner_button:
     owners_list = []
     owner_name = st.text_input("Enter Owner Nr1.")
-
-    if owner_name:
-        owners_list.append(owner_name)
+    owners_list.append(owner_name)
 
 
 
