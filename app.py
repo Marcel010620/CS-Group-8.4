@@ -2,6 +2,14 @@
 import streamlit as st
 from datetime import datetime, timedelta
 
+#Function to initalize session state
+def initialize_session_state():
+    return {"add_item_button_pressed": False, "selected_option_Article": None, "selected_option_Owner": None}
+
+# Check if session state is already initialized
+if "state" not in st.session_state:
+    st.session_state.state = initialize_session_state()
+
 #insert the name of the fridge (for example your WG Name)
 wg_name = st.text_input("Your WG name")
 
@@ -13,7 +21,6 @@ col1, col2, col3, col4 = st.columns(4)
 
 #Initialize buttons 
 add_item_button = col1.button("Add product")
-placeholder = col1.empty()
 remove_item_button = col2.button("Remove product")
 add_owner_button = col3.button("Add owners")
 remove_owner_button = col4.button("remove owner")
