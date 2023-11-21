@@ -15,7 +15,7 @@ if add_owner_button:
     if owner_name:
         owners_list.append(owner_name)
 
-st.write (owners_list)
+
 
 # Display the list of owners outside the if block to avoid resetting the list on each iteration
 st.title(f"This is the smart refrigerator of: {' '.join(map(str, owners_list))}")
