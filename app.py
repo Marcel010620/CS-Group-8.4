@@ -26,3 +26,9 @@ if add_item_button:
     options_Owner = ["A", "B", "C"]
     selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
     st.write("You selected", selected_option_Owner)
+
+#What happens if you press the remove_item_button
+if remove_item_button:
+    remove_options_article = ["Pepper, Milk"] #this needs to be a list with all Procuts inside the fridge
+    removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
+    st.write("You removed", removed_options_article)
