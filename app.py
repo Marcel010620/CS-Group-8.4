@@ -30,10 +30,11 @@ if add_item_button:
     options_Article = ["Pepper", "Milk"]
     selected_option_Article = st.selectbox("Choose your Article", options_Article)
     st.write('You selected:', selected_option_Article)
-
-    options_Owner = ["A", "B", "C"]
-    selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
-    st.write("You selected", selected_option_Owner)
+    
+    if selected_option_Article:
+        options_Owner = ["A", "B", "C"]
+        selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
+        st.write("You selected", selected_option_Owner)
 
 #What happens if you press the remove_item_buttonv
 if remove_item_button:
