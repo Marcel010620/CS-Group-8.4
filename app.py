@@ -13,6 +13,7 @@ col1, col2, col3, col4 = st.columns(4)
 
 #Initialize buttons 
 add_item_button = col1.button("Add product")
+placeholder = col1.empty()
 remove_item_button = col2.button("Remove product")
 add_owner_button = col3.button("Add owners")
 remove_owner_button = col4.button("remove owner")
@@ -29,6 +30,6 @@ if add_item_button:
 
 #What happens if you press the remove_item_buttonv
 if remove_item_button:
-    remove_options_article = ["Pepper, Milk"] #this needs to be a list with all Procuts inside the fridge
+    remove_options_article = ["Pepper", "Milk"] #this needs to be a list with all Procuts inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
