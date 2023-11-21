@@ -1,37 +1,44 @@
-Classes and functions:
+class Product:
+    def __init__(self, name, owner):
+        self.name = name
+        self.owner = owner
 
-Product classes: 
-Parent class dairy, sub class yoghurt, sub class milk, sub class cheese
-Parent class fruit, sub class apple, sub class orange 
-Parent class vegetable, sub class 
-Parent class meat
+    def display_info(self):
+        print(f"{self.name} ({self.brand}) - Owned by: {self.owner}")
 
-Functions 
-Check ownership
-Check status/overview
-Check date of expiry
-Check nutritional values 
-Check traffic
-Check retail_source
+class Food(Product):
+    def __init__(self, name, owner, expiration_date):
+        super().__init__(name, owner)
+        self.expiration_date = expiration_date
 
-
-def check_ownership (product, owner)
-
-fridge.check_owner(product)
-
-def check_status_fridge(products, owners, expiry date, stock)
+    def display_info(self):
+        super().display_info()
+        print(f"Expiration Date: {self.expiration_date}")
 
 
-def check_expiry(product, date expiry)
+class dairy(Product):
+    def __init__(self, name, owner):
+        super().__init__(name, brand, owner)
+  
 
+class SmartFridge:
+    def __init__(self):
+        self.products = []
 
+    def add_product(self, product):
+        self.products.append(product)
 
-def check_nutritional_value(product, nutritional_value)
+    def display_contents(self):
+        print("Smart Fridge Contents:")
+        for product in self.products:
+            product.display_info()
 
+    def check_ownership(self, owner):
+        owned_products = [product for product in self.products if product.owner == owner]
+        if not owned_products:
+            print(f"{owner} does not own any products in the fridge.")
+        else:
+            print(f"{owner}'s Products in the Fridge:")
+            for product in owned_products:
+                print(f"- {product.name} ({product.brand})")
 
-
-def check_traffic(fridge, products, movement)
-
-
-
-def check_source(product, retail_source)
