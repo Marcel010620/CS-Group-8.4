@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 wg_name = st.text_input("Your WG name")
 
 # Display the title with the correct name given by a user input
-st.markdown(f"<h1 style='color:red;'>This is the smart refrigerator of: {wg_name}</h1>", unsafe_allow_html=True)
+st.markdown(f"This is the smart refrigerator of: <h1 style='color:red;'>{wg_name}</h1>", unsafe_allow_html=True)
 
 # Initialize 4 columns to order 4 buttons in a row
 col1, col2, col3, col4 = st.columns(4)
