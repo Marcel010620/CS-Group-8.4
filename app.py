@@ -2,7 +2,7 @@
 import streamlit as st
 from datetime import datetime, timedelta
 
-# Insert the name of the fridge (for example your WG Name)
+# Insert the name of the fridge (for example, your WG Name)
 wg_name = st.text_input("Your WG name")
 
 # Display the title with the correct name given by a user input
@@ -17,24 +17,21 @@ remove_item_button = col2.button("Remove product")
 add_owner_button = col3.button("Add owners")
 remove_owner_button = col4.button("Remove owner")
 
-# Initialize variables for selected options
-selected_option_Article = None
-selected_option_Owner = None
-
-# Placeholder for selectbox
-selectbox_placeholder = st.empty()
+# Initialize session state to store selected options
+if "selected_options" not in st.session_state:
+    st.session_state.selected_options = {"Article": None, "Owner": None}
 
 # What happens if you press the add_item_button
 if add_item_button:
     options_Article = ["Pepper", "Milk"]
-    selected_option_Article = selectbox_placeholder.selectbox("Choose your Article", options_Article)
-    st.write('You selected:', selected_option_Article)
+    st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
+                                                                key="article_selectbox")
+    st.write('You selected:', st.session_state.selected_options["Article"])
 
-if selected_option_Article:
     options_Owner = ["A", "B", "C"]
-    selected_option_Owner = st.selectbox("Choose the Owner", options_Owner)
-    st.write("You selected", selected_option_Owner)
-
+    st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner,
+                                                              key="owner_selectbox")
+    st.write("You selected", st.session_state.selected_options["Owner"])
 
 # What happens if you press the remove_item_button
 if remove_item_button:
