@@ -21,6 +21,9 @@ remove_owner_button = col4.button("Remove owner")
 selected_option_Article = None
 selected_option_Owner = None
 
+# Placeholder for selectbox
+selectbox_placeholder = st.empty()
+
 # What happens if you press the add_item_button
 if add_item_button:
     options_Article = ["Pepper", "Milk"]
