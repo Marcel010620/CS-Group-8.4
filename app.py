@@ -30,6 +30,7 @@ if add_item_button:
     selected_option_Article = selectbox_placeholder.selectbox("Choose your Article", options_Article)
     st.write('You selected:', selected_option_Article)
 
+if selected_option_Article:
     options_Owner = ["A", "B", "C"]
     selected_option_Owner = st.selectbox("Choose the Owner", options_Owner)
     st.write("You selected", selected_option_Owner)
