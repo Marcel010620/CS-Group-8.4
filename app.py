@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # Initialize session state
 if "selected_options" not in st.session_state:
-    st.session_state.selected_options = {"Article": None, "Owner": None}
+    st.session_state.selected_options = {"Article": None, "Owner": None, "show_select_boxes": False}
 
 # Insert the name of the fridge (for example, your WG Name)
 wg_name = st.text_input("Your WG name")
@@ -18,6 +18,11 @@ col1, col2, col3, col4 = st.columns(4)
 # What happens if you press the add_item_button
 add_item_button = col1.button("Add product")
 if add_item_button:
+    options_Article = ["Pepper", "Milk"]
+    st.session_state.selected_options["show_select_boxes"] = True
+
+# Show select boxes if the flag is True
+if st.session_state.selected_options["show_select_boxes"]:
     options_Article = ["Pepper", "Milk"]
     st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
                                                                 key="article_selectbox")
@@ -34,7 +39,7 @@ if remove_item_button:
     remove_options_article = ["Pepper", "Milk"]  # This needs to be a list with all Products inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
-
+    
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
 if add_owner_button:
