@@ -24,6 +24,33 @@ if add_item_button:
     st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
+# What happens if you press the remove_item_button
+remove_item_button = col2.button("Remove product")
+if remove_item_button:
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
+
+# What happens if you press the add_owner_button
+add_owner_button = col3.button("Add owners")
+if add_owner_button:
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
+
+# What happens if you press the remove_owner_button
+remove_owner_button = col4.button("Remove owner")
+if remove_owner_button:
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
+
 # Show select boxes if the flag is True
 if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
     options_Article = ["Pepper", "Milk"]
@@ -36,29 +63,11 @@ if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
                                                               key="owner_selectbox")
     st.write("You selected", st.session_state.selected_options["Owner"])
 
-# What happens if you press the remove_item_button
-remove_item_button = col2.button("Remove product")
-if remove_item_button:
-    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = True
-    # Reset other buttons
-    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
-
 # Show select boxes if the flag is True
 if st.session_state.selected_options["show_select_boxes"]["remove_item_button"]:
     remove_options_article = ["Pepper", "Milk"]  # This needs to be a list with all Products inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
-
-# What happens if you press the add_owner_button
-add_owner_button = col3.button("Add owners")
-if add_owner_button:
-    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = True
-    # Reset other buttons
-    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
 # Show select boxes if the flag is True
 if st.session_state.selected_options["show_select_boxes"]["add_owner_button"]:
@@ -66,15 +75,6 @@ if st.session_state.selected_options["show_select_boxes"]["add_owner_button"]:
     if new_owner:
         st.session_state.selected_options["Owner"] = new_owner
         st.write("New owner added:", new_owner)
-
-# What happens if you press the remove_owner_button
-remove_owner_button = col4.button("Remove owner")
-if remove_owner_button:
-    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = True
-    # Reset other buttons
-    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
-    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
 
 # Show select boxes if the flag is True
 if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]:
