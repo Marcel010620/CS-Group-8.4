@@ -26,7 +26,7 @@ if add_item_button:
     options_Article = ["Pepper", "Milk"]
     selected_option_Article = st.selectbox("Choose your Article", options_Article)
     # Display the selected option outside the button's conditional block
-    if selected_option_Article is not None:
+    if selected_option_Article:
         st.write('You selected:', selected_option_Article)
 
         options_Owner = ["A", "B", "C"]
