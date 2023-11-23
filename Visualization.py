@@ -7,7 +7,7 @@ import numpy as np
 data_dict = {
     'Owner': ['A', 'A', 'C', 'A', 'B'],
     'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
+    'Expiry Date': [3, 2, 4, 7, 5],
 }
 
 # Create a Streamlit app
