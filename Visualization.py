@@ -5,9 +5,9 @@ import numpy as np
 
 # Sample data for different selections
 data_dict = {
-    'Owner': ['Ben', 'Jan', 'Sven', 'Diego', 'Mike'],
-    'Article': ['Milk', 'Pepper', 'Salad', 'Ham', 'Wine'],
-    'Expiry Date': [3, 2, 4, 7, 5],
+    'Owner': ['A', 'A', 'C', 'A', 'B'],
+    'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
+    'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
 }
 
 # Create a Streamlit app
@@ -46,10 +46,10 @@ from datetime import datetime, timedelta
 
 # Sample data
 data = {
-    'Article': ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
+    'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
     'Quantity': [10, 5, 7, 3, 2],
     'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit'],
-    'Owner': ['A', 'B', 'C', 'A', 'B'],
+    'Owner': ['A', 'A', 'C', 'A', 'B'],
     'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
 }
 
