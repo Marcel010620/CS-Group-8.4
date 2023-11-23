@@ -25,6 +25,21 @@ df = pd.DataFrame({'X': range(1, len(selected_data)+1), 'Y': selected_data})
 # Define the step size on the x-axis
 step_size = 1  # Change this value according to your preference
 
+# Create a Streamlit app
+st.title('Custom Step Size on X-axis - Bar Chart')
+
+# Set the figure size
+plt.figure(figsize=(8, 4))
+
+# Create a bar chart using Matplotlib
+plt.bar(df['X'], df['Y'], width=step_size, align='edge')
+
+# Set the x-axis ticks with the desired step size
+x_ticks = np.arange(df['X'].min(), df['X'].max() + 1, step_size)
+plt.xticks(x_ticks)
+
+# Display the plot using Streamlit
+st.pyplot(plt)
 
 # Create a bar chart with Altair
 chart = alt.Chart(df).mark_bar().encode(
