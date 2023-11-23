@@ -46,6 +46,7 @@ class ApartmentFridge:
 apartment_fridge = ApartmentFridge()
 
 #Aufzählung der Produkte , code, kalorien, Expiry Days, Quantität
+
 sausage_A = Meat("Sausage", "03", "1200", 5, quantity=1)
 sausage_B = Meat("Sausage", "03", "1200", 5, quantity=1)
 milk_A = Dairy("Milk", "02", "0400", 7, quantity=1)
