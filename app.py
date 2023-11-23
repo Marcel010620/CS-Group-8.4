@@ -1,6 +1,7 @@
 #Import relevant libraries
 import streamlit as st
 from datetime import datetime, timedelta
+from streamlit.components.v1 import components
 
 # Initialize session state
 if "selected_options" not in st.session_state:
@@ -84,3 +85,29 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
 
+def main():
+    st.title('Calendar in Streamlit')
+    
+    # HTML code for embedding FullCalendar
+    calendar = """
+    <div id='calendar'></div>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid/main.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          plugins: [ 'dayGrid' ], // Use the dayGrid plugin for basic calendar
+          initialView: 'dayGridMonth'
+          // Other configurations can be added here
+        });
+        calendar.render();
+      });
+    </script>
+    """
+
+    # Display the calendar
+    components.html(calendar, height=600)
+
+if __name__ == "__main__":
+    main()
