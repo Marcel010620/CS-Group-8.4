@@ -1,1 +1,86 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Functions 
+# This code was implemented with the help of Chatgpt
+# This code implements the following functions check ownership, check date of expiry, check nutritional values, check for healthy alternative
+
+class SmartFridge:
+    def __init__(self):
+        self.database = {}
+
+    def add_item(self, item_name, owner, expiry_date, nutritional_values):
+        self.database[item_name] = {
+            'owner': owner,
+            'expiry_date': expiry_date,
+            'nutritional_values': nutritional_values
+        }
+
+    def check_ownership(self, item_name, user):
+        if item_name in self.database:
+            return self.database[item_name]['owner'] == user
+        else:
+            return False
+
+    def check_expiry_date(self, item_name):
+        if item_name in self.database:
+            return self.database[item_name]['expiry_date']
+        else:
+            return None
+
+    def check_nutritional_values(self, item_name):
+        if item_name in self.database:
+            return self.database[item_name]['nutritional_values']
+        else:
+            return None
+
+    def check_healthy_alternative(self, item_name):
+        # Dummy logic for suggesting a healthy alternative
+        healthy_alternative = None
+        if item_name in self.database:
+            nutritional_values = self.database[item_name]['nutritional_values']
+            # Add your logic here to find a healthy alternative based on nutritional values
+            # This is just a placeholder, you can replace it with your own algorithm
+            if 'calories' in nutritional_values and nutritional_values['calories'] > 500:
+                healthy_alternative = "Salad"
+        return healthy_alternative
+
+
+# Example usage:
+fridge = SmartFridge()
+
+# Adding items to the fridge
+fridge.add_item('Apple', 'John', '2023-01-01', {'calories': 95, 'protein': 0.5, 'fat': 0.3, 'carbs': 25})
+fridge.add_item('Chocolate', 'Mary', '2023-02-01', {'calories': 210, 'protein': 2, 'fat': 13, 'carbs': 23})
+
+# Checking ownership
+print(fridge.check_ownership('Apple', 'John'))  # True
+print(fridge.check_ownership('Chocolate', 'John'))  # False
+
+# Checking expiry date
+print(fridge.check_expiry_date('Apple'))  # '2023-01-01'
+
+# Checking nutritional values
+print(fridge.check_nutritional_values('Apple'))  # {'calories': 95, 'protein': 0.5, 'fat': 0.3, 'carbs': 25}
+
+# Checking healthy alternative
+print(fridge.check_healthy_alternative('Chocolate'))  # 'Salad'
