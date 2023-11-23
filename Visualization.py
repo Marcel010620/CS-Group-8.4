@@ -70,10 +70,11 @@ if selection_option == 'Owner':
     selected_owner = st.selectbox('Select an owner:', owners_list)
     st.write(f'Selected owner: {selected_owner}')
     
-    # Filter and display products belonging to the selected owner
+    # Filter and concatenate products belonging to the selected owner
     owner_products = df[df['Owner'] == selected_owner]['Article'].tolist()
-    st.write(f'Products owned by {selected_owner}:')
-    st.write(owner_products)
+    owner_products_str = ', '.join(owner_products)
+    
+    st.write(f'Products owned by {selected_owner}: {owner_products_str}')
 
 elif selection_option == 'Expires soon':
     expiration_threshold = datetime.now() + timedelta(days=2)
