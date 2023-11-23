@@ -1,3 +1,4 @@
+#Import relevant libraries
 import streamlit as st
 from datetime import datetime, timedelta
 
@@ -8,7 +9,7 @@ if "selected_options" not in st.session_state:
 # Insert the name of the fridge (for example, your WG Name)
 wg_name = st.text_input("Your WG name")
 
-# Display the title with the correct name given by a user input
+# Display the title with a name given by a user input (style red)
 st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
 
 # Initialize 4 columns to order 4 buttons in a row
@@ -82,8 +83,4 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
     if removed_owner:
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
-# Define your data
-data = {'Article': ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
-        'Quantity': [10, 5, 7, 3, 2],
-        'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit']}
 
