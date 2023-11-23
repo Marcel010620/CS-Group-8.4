@@ -69,9 +69,10 @@ apartment_fridge.add_product(tomato_B)
 
 apartment_fridge.display_fridge_contents()
 
-
+-----------------------------------------------------------------------
 
 #TRY 2
+
 
 
 
@@ -120,16 +121,16 @@ class ApartmentFridge:
 
 apartment_fridge = ApartmentFridge()
 
-#Aufzählung der Produkte , bei "03" beliebigen code einfügen für streamlit, kalorien, Expiry Days, Quantität
+#Aufzählung der Produkte , bei "03" beliebigen code einfügen für streamlit, kalorien, Expiry Days, owner,  Quantität
 
-sausage_A = Meat("Sausage", "03", "1200", 3, quantity=1)
-sausage_B = Meat("Sausage", "03", "1200", 3, quantity=1)
-milk_A = Dairy("Milk", "02", "0400", 7, quantity=1)
-milk_B = Dairy("Milk", "02", "0400", 7, quantity=1)
-apple_A = Fruit("Apple", "04", "0300", 10, quantity=1)
-apple_B = Fruit("Apple", "04", "0300", 10, quantity=1)
-tomatoes_A = Vegetable("Tomatoes", "05", "0200", 5, quantity=1)
-tomatoes_B = Vegetable("Tomatoes", "05", "0200", 5, quantity=1)
+sausage_A = Meat("Sausage", "03", "1200", 3, "Eric" ,  quantity=1)
+sausage_B = Meat("Sausage", "03", "1200", 3, "Simona", quantity=1)
+milk_A = Dairy("Milk", "02", "0400", 7, "Lorenzo", quantity=1)
+milk_B = Dairy("Milk", "02", "0400", 7, "Raffaello", quantity=1)
+apple_A = Fruit("Apple", "04", "0300", 10, "Anina", quantity=1)
+apple_B = Fruit("Apple", "04", "0300", 10, "Lorenzo", quantity=1)
+tomatoes_A = Vegetable("Tomatoes", "05", "0200", 5, "Max",  quantity=1)
+tomatoes_B = Vegetable("Tomatoes", "05", "0200", 5, "Moritz", quantity=1)
 
 
 apartment_fridge.add_product(sausage_A)
