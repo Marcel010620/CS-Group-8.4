@@ -41,24 +41,3 @@ class SmartFridge:
             if 'calories' in nutritional_values and nutritional_values['calories'] > 500:
                 healthy_alternative = "Salad"
         return healthy_alternative
-
-
-# Example usage:
-fridge = SmartFridge()
-
-# Adding items to the fridge
-fridge.add_item('Apple', 'John', '2023-01-01', {'calories': 95, 'protein': 0.5, 'fat': 0.3, 'carbs': 25})
-fridge.add_item('Chocolate', 'Mary', '2023-02-01', {'calories': 210, 'protein': 2, 'fat': 13, 'carbs': 23})
-
-# Checking ownership
-print(fridge.check_ownership('Apple', 'John'))  # True
-print(fridge.check_ownership('Chocolate', 'John'))  # False
-
-# Checking expiry date
-print(fridge.check_expiry_date('Apple'))  # '2023-01-01'
-
-# Checking nutritional values
-print(fridge.check_nutritional_values('Apple'))  # {'calories': 95, 'protein': 0.5, 'fat': 0.3, 'carbs': 25}
-
-# Checking healthy alternative
-print(fridge.check_healthy_alternative('Chocolate'))  # 'Salad'
