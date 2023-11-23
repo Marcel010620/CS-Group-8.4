@@ -5,9 +5,9 @@ import numpy as np
 
 # Sample data for different selections
 data_dict = {
-    'Option 1': [10, 15, 20, 25, 30],
-    'Option 2': [5, 10, 15, 20, 25],
-    'Option 3': [8, 12, 16, 20, 24],
+    'Owner': ['Ben', 'Jan', 'Sven', 'Diego', 'Mike'],
+    'Article': ['Milk', 'Pepper', 'Salad', 'Ham', 'Wine'],
+    'Expiry Date': [3, 2, 4, 7, 5],
 }
 
 # Create a Streamlit app
@@ -26,7 +26,7 @@ df = pd.DataFrame({'X': range(1, len(selected_data)+1), 'Y': selected_data})
 chart = alt.Chart(df).mark_bar().encode(
     x='X',
     y='Y',
-    color=alt.value('blue')
+    color=alt.value('red')
 ).properties(
     width=400,
     height=300,
@@ -35,3 +35,4 @@ chart = alt.Chart(df).mark_bar().encode(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
