@@ -67,8 +67,13 @@ st.write(f'Selected option: {selection_option}')
 # Based on the selected option, create and display the corresponding list
 if selection_option == 'Owner':
     owners_list = df['Owner'].unique()
-    selected_list = st.multiselect('Select owners:', owners_list)
-    st.write(f'Selected owners: {selected_list}')
+    selected_owner = st.selectbox('Select an owner:', owners_list)
+    st.write(f'Selected owner: {selected_owner}')
+    
+    # Filter and display products belonging to the selected owner
+    owner_products = df[df['Owner'] == selected_owner]['Article'].tolist()
+    st.write(f'Products owned by {selected_owner}:')
+    st.write(owner_products)
 
 elif selection_option == 'Expires soon':
     expiration_threshold = datetime.now() + timedelta(days=2)
