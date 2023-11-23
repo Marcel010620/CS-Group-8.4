@@ -1,5 +1,6 @@
+#Import relevant libraries
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Initialize session state
 if "selected_options" not in st.session_state:
@@ -22,13 +23,6 @@ if add_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
     st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
-
-    # Get today's date for default value
-    today_date = datetime.now()
-
-    # Date input field with a default value of today
-    selected_date = st.date_input('Select a date:', value=today_date)
-    st.write('Selected Date:', selected_date)
 
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
