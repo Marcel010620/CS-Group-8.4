@@ -25,7 +25,6 @@ df = pd.DataFrame({'X': range(1, len(selected_data)+1), 'Y': selected_data})
 # Define the step size on the x-axis
 step_size = 1  # Change this value according to your preference
 
-
 # Create a bar chart with Altair
 chart = alt.Chart(df).mark_bar().encode(
     x='X',
