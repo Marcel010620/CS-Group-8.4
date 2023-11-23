@@ -1,3 +1,5 @@
+!pip install matplotlib
+!pip list
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,7 +21,7 @@ fig, ax = plt.subplots(figsize=(10, 5))
 # Set the color of the bar for each category
 color_dict = {'Fruit': 'c'}
 
-# Define bar positions on x axis
+# Define bar positions on x-axis
 bar_positions = range(len(df['Article']))
 
 # Create bars with small spaces
@@ -40,3 +42,6 @@ ax.set_xticklabels([])
 
 # Display the plot using Streamlit
 st.pyplot(fig)
+
+# Close the Matplotlib figure to clear it from memory
+plt.close(fig)
