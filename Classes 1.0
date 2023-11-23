@@ -42,7 +42,7 @@ class ApartmentFridge:
             for product in products:
                 print(f" - {product.name} ({product.quantity} pieces)")
 
-# Example usage:
+
 apartment_fridge = ApartmentFridge()
 
 #Aufzählung der Produkte , code, kalorien, Expiry Days, Quantität
