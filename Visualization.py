@@ -5,9 +5,9 @@ import numpy as np
 
 # Sample data for different selections
 data_dict = {
-    'Option 1': [10, 15, 20, 25, 30],
-    'Option 2': [5, 10, 15, 20, 25],
-    'Option 3': [8, 12, 16, 20, 24],
+    'Option 1': [10, 15, 20, 25, 30, 35],
+    'Option 2': [5, 10, 15, 20, 25, 30],
+    'Option 3': [8, 12, 16, 20, 24, 28],
 }
 
 # Create a Streamlit app
