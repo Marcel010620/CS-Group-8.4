@@ -16,7 +16,7 @@ df = df.sort_values(by='Quantity', ascending=False)
 plt.figure(figsize=(10,5))
 
 # Set the color of the bar for each category
-color_dict = {'Fruit': 'g'}
+color_dict = {'Fruit': 'c'}
 
 # Define bar positions on x axis
 bar_positions = range(len(df['Article']))
@@ -28,6 +28,7 @@ for i, row in df.iterrows():
 # Create bar labels
 for i, row in df.iterrows():
     plt.text(bar_positions[i], row['Quantity'] + 0.2, row['Article'], fontsize=12)
+
 
 # Set axes limits
 plt.ylim(0, df['Quantity'].max() + 2)
@@ -44,3 +45,5 @@ plt.xticks(article_ticks, article_labels, rotation=90)
 
 # Show the plot
 plt.show()
+
+
