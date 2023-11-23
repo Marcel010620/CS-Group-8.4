@@ -70,11 +70,14 @@ if selection_option == 'Owner':
     selected_owner = st.selectbox('Select an owner:', owners_list)
     st.write(f'Selected owner: {selected_owner}')
     
-    # Filter and concatenate products belonging to the selected owner
-    owner_products = df[df['Owner'] == selected_owner]['Article'].tolist()
-    owner_products_str = ', '.join(owner_products)
+    # Filter and calculate total count of products belonging to the selected owner
+    owner_products = df[df['Owner'] == selected_owner]
+    total_count_dict = owner_products.groupby('Article')['Quantity'].sum().to_dict()
     
-    st.write(f'Products owned by {selected_owner}: {owner_products_str}')
+    st.write(f'Total count of products owned by {selected_owner}:')
+    
+    for article, total_count in total_count_dict.items():
+        st.write(f'{article}: {total_count}')
 
 elif selection_option == 'Expires soon':
     expiration_threshold = datetime.now() + timedelta(days=2)
