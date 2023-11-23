@@ -1,101 +1,46 @@
-import qrcode
-from PIL import Image
-import json
-import base64
-import io
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
-import streamlit as st
-from datetime import datetime, timedelta
+# Define your data
+data = {'Article': ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
+        'Quantity': [10, 5, 7, 3, 2],
+        'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit']}
 
-options_Article = ["Pepper", "Milk"]
-selected_option_Article = st.selectbox("Choose your Article", options_Article)
-st.write('You selected:', selected_option_Article)
+df = pd.DataFrame(data)
 
-options_Owner = ["A", "B", "C"]
-selected_option_Owner = st.selectbox("Chosse the Owner", options_Owner)
-st.write("You selected", selected_option_Owner)
+# Sort data by quantity in descending order
+df = df.sort_values(by='Quantity', ascending=False)
 
-today = datetime.now().date()
+# Set figure size
+plt.figure(figsize=(10,5))
 
-if selected_option_Article == "Pepper": 
-    Product_Code = "01"
-    calories = "0037"
-    Expiring_Date = (today + timedelta(days=10)).strftime("%d%m%Y")
-    if selected_option_Owner == "A": 
-        Owner_Nr = "01"
-    elif selected_option_Owner == "B": 
-        Owner_Nr = "02"
-    elif selected_option_Owner == "C":
-        Owner_Nr = "03"
-    Article_Code = str(Product_Code+Expiring_Date+calories+Owner_Nr)
+# Set the color of the bar for each category
+color_dict = {'Fruit': 'g'}
 
-if selected_option_Article == "Milk": 
-    Product_Code = "02"
-    calories = "0400"
-    Expiring_Date = (today + timedelta(days=7)).strftime("%d%m%Y")
-    if selected_option_Owner == "A": 
-        Owner_Nr = "01"
-    elif selected_option_Owner == "B": 
-        Owner_Nr = "02"
-    elif selected_option_Owner == "C":
-        Owner_Nr = "03"
-    Article_Code = str(Product_Code+Expiring_Date+calories+Owner_Nr)
+# Define bar positions on x axis
+bar_positions = range(len(df['Article']))
 
-if st.button('Reload your Article Code'):
-    # This will force the Streamlit app to rerun
-    st.experimental_rerun()
+# Create bars
+for i, row in df.iterrows():
+    plt.bar(bar_positions[i], row['Quantity'], color=color_dict[row['Category']], alpha=0.6)
 
-st.write(Article_Code)
+# Create bar labels
+for i, row in df.iterrows():
+    plt.text(bar_positions[i], row['Quantity'] + 0.2, row['Article'], fontsize=12)
 
-from datetime import datetime, timedelta
-def decode_product_code(article_Code):
-    product_number = article_Code[:2]
-    expiration_date = article_Code[2:10]
-    calories = article_Code[10:14]
-    product_owner = article_Code[14:]
+# Set axes limits
+plt.ylim(0, df['Quantity'].max() + 2)
 
-    product_number = int(product_number)
-    
-    expiration_date = (datetime.strptime(expiration_date,"%d%m%Y")).strftime("%d.%m.%Y")
-    calories = calories.lstrip("0")
-    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
+# Create custom x-axis ticks and labels for the articles
+article_ticks = []
+article_labels = []
 
-    return {
-        "Product Number": product_number,
-        "Expiration Date": expiration_date,
-        "Calories": calories,
-        "Product Owner": product_owner}
+for i, row in df.iterrows():
+    article_ticks.append(i + 0.5)
+    article_labels.append(row['Article'])
 
-st.write(decode_product_code(Article_Code))
+plt.xticks(article_ticks, article_labels, rotation=90)
 
-
-import qrcode
-from PIL import Image
-
-def dict_to_qr_code(data):
-    # Convert dictionary to string
-    data_str = json.dumps(data)
-
-    # Create QR Code from string
-    qr = qrcode.QRCode()
-    qr.add_data(data_str)
-    qr.make()
-
-    # Convert QR Code to an image
-    img = qr.make_image(fill_color="black", back_color="white")
-
-    return img
-
-import base64
-import io
-
-# ...
-
-buffered = io.BytesIO()
-qr_code_img.save(buffered, format="PNG")
-img_str = base64.b64encode(buffered.getvalue()).decode()
-
-
-# Display QR Code image
-st.image(img_str)
-
+# Show the plot
+plt.show()
