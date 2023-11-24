@@ -41,11 +41,20 @@ elif selected_option == 'Expiry Date':
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
+    x=alt.X(f'{x_title}:O', title=x_title),
     y=alt.Y(f'{y_title}:Q', title=y_title),
     color=alt.value('blue'),
     tooltip=[x_title, y_title, alt.Tooltip('Expiry Date:T', format='%Y-%m-%d')]
-).properties(
+)
+
+# Apply changes only when 'Expiry Date' is chosen
+if selected_option == 'Expiry Date':
+    chart = chart.encode(
+        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m'))
+    )
+
+# Set chart properties
+chart = chart.properties(
     width=400,
     title=f'Bar Chart - {selected_option}'
 )
