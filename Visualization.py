@@ -58,6 +58,7 @@ if selected_option == 'Expiry Date':
     ).transform_filter(
         alt.datum.Count > 0
     )
+    remove_double_datetime
 
 # Set chart properties
 chart = chart.properties(
