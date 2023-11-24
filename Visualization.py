@@ -36,11 +36,12 @@ elif selected_option == 'Expiry Date':
     next_7_days_str = [date.date() for date in next_7_days]
     df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
     chart_df = df[df['Expiry Date'].dt.date.isin(next_7_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
+    chart_df = chart_df.head(5)  # Limit to 5 bars
     x_title, y_title = 'Expiry Date', 'Count'
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:O', title=x_title, axis=alt.Axis(values=list(range(1, 8)), ticks=True)),
+    x=alt.X(f'{x_title}:O', title=x_title, axis=alt.Axis(ticks=True)),
     y=alt.Y(f'{y_title}:Q', title=y_title),
     color=alt.value('blue'),
     tooltip=[x_title, y_title, alt.Tooltip('Expiry Date:T', format='%Y-%m-%d')]
