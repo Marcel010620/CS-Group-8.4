@@ -49,8 +49,14 @@ chart = alt.Chart(chart_df).mark_bar().encode(
 
 # Apply changes only when 'Expiry Date' is chosen
 if selected_option == 'Expiry Date':
-    chart = chart.encode(
-        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m'))
+    chart = chart.transform_impute(
+        impute='Count',
+        key='Expiry Date',
+        value=0
+    ).encode(
+        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
+    ).transform_filter(
+        alt.datum.Count > 0
     )
 
 # Set chart properties
