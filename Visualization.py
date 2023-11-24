@@ -5,14 +5,12 @@ from datetime import datetime, timedelta
 import random
 
 # Sample data for different selections
-
-
-# Create expiry dates f# Sample data for different selections
 data_dict = {
     'Owner': ['A', 'A', 'C', 'A', 'B', 'C', 'B', 'A', 'D', 'D', 'B', 'C', 'D', 'B', 'C'],
-    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Cherry', 'Apple', 'Orange', 'Grapes', 'Banana', 'Cherry', 'Orange', 'Grapes', 'Apple'],
+    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Cherry', 'Apple', 'Orange', 'Grapes', 'Banana', 'Cherry', 'Orange', 'Grapes', 'Milk'],
 }
 
+# Make sure the number of expiry dates matches the number of articles
 expiry_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(len(data_dict['Article']))]
 data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
 
@@ -42,7 +40,7 @@ elif selected_option == 'Expiry Date':
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:O', title=x_title, axis=alt.Axis(values=list(range(1, 8)))),
+    x=alt.X(f'{x_title}:O', title=x_title, axis=alt.Axis(values=list(range(1, 8)), ticks=True)),
     y=alt.Y(f'{y_title}:Q', title=y_title),
     color=alt.value('blue'),
     tooltip=[x_title, y_title, alt.Tooltip('Expiry Date:T', format='%Y-%m-%d')]
