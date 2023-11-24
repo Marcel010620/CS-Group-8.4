@@ -27,12 +27,12 @@ step_size = 1  # Change this value according to your preference
 
 # Create a bar chart with Altair
 chart = alt.Chart(df).mark_bar().encode(
-    x='Article:N' if selected_option == 'Article' else alt.X('Quantity:O', axis=alt.Axis(tickMinStep=step_size)),
-    y=alt.Y('sum(Quantity):Q', title='Total Quantity') if selected_option == 'Article' else 'Y',
-    color=alt.value('red')
+    x=alt.X('Article:N', title='Article', axis=alt.Axis(tickMinStep=step_size)),
+    y=alt.Y('sum(Quantity):Q', title='Total Quantity'),
+    color=alt.value('red'),
+    column='Article:N'
 ).properties(
-    width=400,
-    height=300,
+    width=200,
     title=f'Bar Chart - {selected_option}'
 )
 
