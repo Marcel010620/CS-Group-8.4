@@ -5,12 +5,14 @@ from datetime import datetime, timedelta
 import random
 
 # Sample data for different selections
+
+
+# Create expiry dates f# Sample data for different selections
 data_dict = {
-    'Owner': ['A', 'A', 'C', 'A', 'B'],
-    'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
+    'Owner': ['A', 'A', 'C', 'A', 'B', 'C', 'B', 'A', 'D', 'D', 'B', 'C', 'D', 'B', 'C'],
+    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Cherry', 'Apple', 'Orange', 'Grapes', 'Banana', 'Cherry', 'Orange', 'Grapes', 'Apple'],
 }
 
-# Create expiry dates for each article in the next 7 days
 expiry_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(len(data_dict['Article']))]
 data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
 
