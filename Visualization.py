@@ -10,34 +10,34 @@ data_dict = {
     'Expiry Date': [3, 2, 4, 7, 5],
 }
 
+df = pd.DataFrame(data)
+
 # Create a Streamlit app
-st.title('Dropdown Selection and Bar Chart')
+st.title('Bar Chart Based on Dropdown Selection')
 
 # Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', list(data_dict.keys()))
+selected_option = st.selectbox('Select an option:', ['Article', 'Category'])
 
-# Get data for the selected option
-selected_data = data_dict[selected_option]
+# Display the selected option
+st.write(f'Selected option: {selected_option}')
 
-# Create a DataFrame for Altair
-df = pd.DataFrame({'X': range(1, len(selected_data)+1), 'Y': selected_data})
+# Set the figure size
+plt.figure(figsize=(8, 4))
 
-# Define the step size on the x-axis
-step_size = 1  # Change this value according to your preference
+# Create a bar chart based on the selected option
+if selected_option == 'Article':
+    plt.bar(df['Quantity'], df['Article'])
+    plt.xlabel('Quantity')
+    plt.ylabel('Article')
 
-# Create a bar chart with Altair
-chart = alt.Chart(df).mark_bar().encode(
-    x='X',
-    y='Y',
-    color=alt.value('red')
-).properties(
-    width=400,
-    height=300,
-    title=f'Bar Chart - {selected_option}'
-)
+elif selected_option == 'Category':
+    plt.bar(df['Quantity'], df['Category'])
+    plt.xlabel('Quantity')
+    plt.ylabel('Category')
 
-# Display the bar chart using Streamlit
-st.altair_chart(chart, use_container_width=True)
+# Display the plot using Streamlit
+st.pyplot(plt)
+
 
 import streamlit as st
 import pandas as pd
