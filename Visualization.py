@@ -39,6 +39,11 @@ elif selected_option == 'Expiry Date':
     chart_df = chart_df.head(5)  # Limit to 5 bars
     x_title, y_title = 'Expiry Date', 'Count'
 
+    alt.Chart(df_ex.dropna()).mark_bar().encode(
+    alt.X(expiry_dates, title = 'Expire Date'),
+    alt.Y('count():Q', title = 'Count'),
+    )
+
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
     x=alt.X(f'{x_title}:O', title=x_title),
