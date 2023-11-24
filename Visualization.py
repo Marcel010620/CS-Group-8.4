@@ -2,18 +2,19 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 from datetime import datetime, timedelta
+import random
 
 # Sample data for different selections
 data_dict = {
     'Owner': ['A', 'A', 'C', 'A', 'B'],
     'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Expiry Date': [datetime.now() + timedelta(days=3), datetime.now() + timedelta(days=2),
-                    datetime.now() + timedelta(days=4), datetime.now() + timedelta(days=7),
-                    datetime.now() + timedelta(days=5)],
 }
 
+# Create expiry dates for each article in the next 7 days
+expiry_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(len(data_dict['Article']))]
+data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
+
 df = pd.DataFrame(data_dict)
-df['Expiry Date'] = pd.to_datetime(df['Expiry Date']).dt.date
 
 # Create a Streamlit app
 st.title('Dropdown Selection and Bar Chart')
@@ -32,7 +33,7 @@ elif selected_option == 'Article':
 
 elif selected_option == 'Expiry Date':
     next_7_days = [datetime.now() + timedelta(days=i) for i in range(7)]
-    next_7_days_str = [date.strftime('%Y-%m-%d') for date in next_7_days]
+    next_7_days_str = [date.date() for date in next_7_days]
     chart_df = df[df['Expiry Date'].isin(next_7_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
     x_title, y_title = 'Expiry Date', 'Count'
 
@@ -49,6 +50,7 @@ chart = alt.Chart(chart_df).mark_bar().encode(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 import streamlit as st
 import pandas as pd
