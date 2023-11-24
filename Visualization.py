@@ -3,6 +3,10 @@ import pandas as pd
 import altair as alt
 import numpy as np
 
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
 # Sample data for different selections
 data_dict = {
     'Owner': ['A', 'A', 'C', 'A', 'B'],
