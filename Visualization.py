@@ -1,38 +1,49 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-import numpy as np
+from datetime import datetime, timedelta
 
 # Sample data for different selections
 data_dict = {
     'Owner': ['A', 'A', 'C', 'A', 'B'],
     'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Expiry Date': [3, 2, 4, 7, 5],
+    'Expiry Date': [datetime.now() + timedelta(days=3), datetime.now() + timedelta(days=2),
+                    datetime.now() + timedelta(days=4), datetime.now() + timedelta(days=7),
+                    datetime.now() + timedelta(days=5)],
 }
+
+df = pd.DataFrame(data_dict)
+df['Expiry Date'] = pd.to_datetime(df['Expiry Date']).dt.date
 
 # Create a Streamlit app
 st.title('Dropdown Selection and Bar Chart')
 
 # Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', list(data_dict.keys()))
-
-# Get data for the selected option
-selected_data = data_dict[selected_option]
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiry Date'])
 
 # Create a DataFrame for Altair
-df = pd.DataFrame({'Quantity': range(1, len(selected_data)+1), 'Y': selected_data})
+if selected_option == 'Owner':
+    chart_df = df.groupby('Owner').size().reset_index(name='Count')
+    x_title, y_title = 'Owner', 'Count'
 
-# Define the step size on the x-axis
-step_size = 1  # Change this value according to your preference
+elif selected_option == 'Article':
+    chart_df = df.groupby('Article').size().reset_index(name='Count')
+    x_title, y_title = 'Article', 'Count'
+
+elif selected_option == 'Expiry Date':
+    next_7_days = [datetime.now() + timedelta(days=i) for i in range(7)]
+    next_7_days_str = [date.strftime('%Y-%m-%d') for date in next_7_days]
+    chart_df = df[df['Expiry Date'].isin(next_7_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
+    x_title, y_title = 'Expiry Date', 'Count'
 
 # Create a bar chart with Altair
-chart = alt.Chart(df).mark_bar().encode(
-    x='Article:N' if selected_option == 'Article' else alt.X('Quantity:O', axis=alt.Axis(tickMinStep=step_size)),
-    y=alt.Y('Quantity:Q', title='Quantity') if selected_option == 'Article' else 'Y',
-    color=alt.value('red')
+chart = alt.Chart(chart_df).mark_bar().encode(
+    x=alt.X(f'{x_title}:N', title=x_title),
+    y=alt.Y(f'{y_title}:Q', title=y_title),
+    color=alt.value('blue'),
+    tooltip=[x_title, y_title]
 ).properties(
     width=400,
-    height=300,
     title=f'Bar Chart - {selected_option}'
 )
 
