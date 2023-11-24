@@ -20,14 +20,14 @@ selected_option = st.selectbox('Select an option:', list(data_dict.keys()))
 selected_data = data_dict[selected_option]
 
 # Create a DataFrame for Altair
-df = pd.DataFrame({'X': range(1, len(selected_data)+1), 'Y': selected_data})
+df = pd.DataFrame({'Quantity': range(1, len(selected_data)+1), 'Y': selected_data})
 
 # Define the step size on the x-axis
 step_size = 1  # Change this value according to your preference
 
 # Create a bar chart with Altair
 chart = alt.Chart(df).mark_bar().encode(
-    x='X',
+    x=alt.X('Quantity:O', axis=alt.Axis(tickMinStep=step_size)),  # Use ordinal scale for the x-axis
     y='Y',
     color=alt.value('red')
 ).properties(
