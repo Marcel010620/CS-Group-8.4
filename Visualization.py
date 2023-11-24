@@ -1,3 +1,57 @@
+
+import streamlit as st
+import pandas as pd
+from datetime import datetime, timedelta
+import random
+import plotly.express as px
+
+# Sample data for different selections
+data_dict = {
+    'Owner': ['A', 'A', 'C', 'A', 'B', 'C', 'B', 'A', 'D', 'D', 'B', 'C', 'D', 'B', 'C'],
+    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Cherry', 'Apple', 'Orange', 'Grapes', 'Banana', 'Cherry', 'Orange', 'Grapes', 'Milk'],
+}
+
+# Make sure the number of expiry dates matches the number of articles
+expiry_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(len(data_dict['Article']))]
+data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
+
+df = pd.DataFrame(data_dict)
+
+# Create a Streamlit app
+st.title('Fridge Overview')
+
+# Create a dropdown to select an option
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiry Date'])
+
+# Create a DataFrame for Plotly
+if selected_option == 'Owner':
+    chart_df = df.groupby('Owner').size().reset_index(name='Count')
+    x_title, y_title = 'Owner', 'Count'
+
+elif selected_option == 'Article':
+    chart_df = df.groupby('Article').size().reset_index(name='Count')
+    x_title, y_title = 'Article', 'Count'
+
+elif selected_option == 'Expiry Date':
+    next_5_days = [datetime.now() + timedelta(days=i) for i in range(1, 6)]
+    next_5_days_str = [date.date() for date in next_5_days]
+    df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
+    chart_df = df[df['Expiry Date'].dt.date.isin(next_5_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
+    chart_df = chart_df.head(5)  # Limit to 5 bars
+    x_title, y_title = 'Expiry Date', 'Count'
+
+# Create a bar chart with Plotly
+fig = px.bar(chart_df, x=x_title, y=y_title, color_discrete_sequence=['blue'])
+fig.update_layout(title=f'Bar Chart - {selected_option}', width=400)
+
+# Apply changes only when 'Expiry Date' is chosen
+if selected_option == 'Expiry Date':
+    fig.update_xaxes(type='category', tickformat='%d/%m')
+
+# Display the bar chart using Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+
 import streamlit as st
 import pandas as pd
 import altair as alt
