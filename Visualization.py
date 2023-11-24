@@ -58,7 +58,10 @@ if selected_option == 'Expiry Date':
     ).transform_filter(
         alt.datum.Count > 0
     )
-
+    chart = chart.properties(
+    width=400,
+    title=f'Bar Chart - {selected_option}'
+    )
 
 # Set chart properties
 chart = chart.properties(
