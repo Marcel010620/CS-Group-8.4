@@ -40,8 +40,8 @@ elif selected_option == 'Expiry Date':
     x_title, y_title = 'Expiry Date', 'Count'
 
     alt.Chart(df_ex.dropna()).mark_bar().encode(
-    alt.X(expiry_dates, title = 'Expire Date'),
-    alt.Y('count():Q', title = 'Count'),
+    alt.x(expiry_dates, title = 'Expire Date'),
+    alt.y('count():Q', title = 'Count'),
     )
 
 # Create a bar chart with Altair
