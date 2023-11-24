@@ -27,8 +27,8 @@ step_size = 1  # Change this value according to your preference
 
 # Create a bar chart with Altair
 chart = alt.Chart(df).mark_bar().encode(
-    x=alt.X('Quantity:O', axis=alt.Axis(tickMinStep=step_size)),  # Use ordinal scale for the x-axis
-    y='Y',
+    x='Article:N' if selected_option == 'Article' else alt.X('Quantity:O', axis=alt.Axis(tickMinStep=step_size)),
+    y=alt.Y('Quantity:Q', title='Quantity') if selected_option == 'Article' else 'Y',
     color=alt.value('red')
 ).properties(
     width=400,
