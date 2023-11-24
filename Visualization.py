@@ -17,7 +17,7 @@ data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
 df = pd.DataFrame(data_dict)
 
 # Create a Streamlit app
-st.title('Dropdown Selection and Bar Chart')
+st.title('Fridge Overview')
 
 # Create a dropdown to select an option
 selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiry Date'])
@@ -32,10 +32,10 @@ elif selected_option == 'Article':
     x_title, y_title = 'Article', 'Count'
 
 elif selected_option == 'Expiry Date':
-    next_7_days = [datetime.now() + timedelta(days=i) for i in range(1, 8)]
-    next_7_days_str = [date.date() for date in next_7_days]
+    next_5_days = [datetime.now() + timedelta(days=i) for i in range(1, 6)]
+    next_5_days_str = [date.date() for date in next_5_days]
     df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
-    chart_df = df[df['Expiry Date'].dt.date.isin(next_7_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
+    chart_df = df[df['Expiry Date'].dt.date.isin(next_5_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
     chart_df = chart_df.head(5)  # Limit to 5 bars
     x_title, y_title = 'Expiry Date', 'Count'
 
