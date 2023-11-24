@@ -86,7 +86,7 @@ data = {
 df = pd.DataFrame(data)
 
 # Create a Streamlit app
-st.title('List Based on Dropdown Selection')
+st.title('Ownership')
 
 # Create a dropdown to select either "Owner" or "Expires soon"
 selection_option = st.selectbox('Select an option:', ['Owner', 'Expires soon'])
