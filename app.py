@@ -245,7 +245,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import streamlit as st
 import altair as alt
-import random
+
 
 # Visualization of the bar chart
 
@@ -263,15 +263,8 @@ data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 rows = []
 for i in range(len(data['Article'])):
     units = data['Quantity'][i]
-    expiration_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(units)]
-    for expiration_date in expiration_dates:
-        row = {
-            'Article': data['Article'][i],
-            'Quantity': 1,  # Count each unit as 1
-            'Owner': data['Owner'][i],
-            'Expiration Date': expiration_date,
-        }
-        rows.append(row)
+    
+    rows.append(row)
 
 df = pd.DataFrame(rows)
 
