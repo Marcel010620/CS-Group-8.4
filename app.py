@@ -231,18 +231,23 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
 # Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
-    decoded_info_list = []
+    # Create a defaultdict to store the product codes for each owner and product
+    owner_product_codes = defaultdict(lambda: defaultdict(list))
 
-    for product_code in st.session_state.inventory_list:
-        decoded_info = decode_product_code(product_code)
-        decoded_info_list.append(decoded_info)
+    # Iterate through the decoded_info_dict in session state
+    for product_code, decoded_info in st.session_state.decoded_info_dict.items():
+        owner = decoded_info["Product Owner"]
+        product_number = decoded_info["Product Number"]
+        expiration_date = decoded_info["Expiration Date"]
+        owner_product_codes[owner][product_number].append((product_code, expiration_date))
 
-    # Create a DataFrame from the decoded information
-    inventory_df = pd.DataFrame(decoded_info_list)
-
-    # Display the inventory table
-    st.write("Inventory:")
-    st.table(inventory_df)
+    # Display the results
+    for owner, product_codes in owner_product_codes.items():
+        st.write(f"Owner {owner} possesses the following products:")
+        for product_number, codes_and_dates in product_codes.items():
+            for product_code, expiration_date in codes_and_dates:
+                st.write(f"Product {product_number}: Code - {product_code}, Expiration Date - {expiration_date}")
+        st.write()
 
 
 from datetime import datetime, timedelta
