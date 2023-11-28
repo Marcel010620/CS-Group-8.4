@@ -190,9 +190,11 @@ if confirm_button:
 
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
+    product_code = generate_product_code(article, owner)  # Move the product code generation here
     decoded_info = decode_product_code(product_code)
     st.write("Decoded Product Information:")
     st.write(decoded_info)
+
 
 
 
