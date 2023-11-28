@@ -40,8 +40,9 @@ selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expira
 
 # Create a DataFrame for Altair
 if selected_option == 'Owner':
-    chart_df = df.groupby('Owner').size().reset_index(name='Count')
-    x_title, y_title = 'Owner', 'Count'
+    # Store the DataFrame outside the block to keep it constant
+    chart_df_owner = df.groupby('Owner').size().reset_index(name='Count')
+    x_title_owner, y_title_owner = 'Owner', 'Count'
 
 elif selected_option == 'Article':
     chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
@@ -55,12 +56,20 @@ elif selected_option == 'Expiration Date':
     x_title, y_title = 'Expiration Date', 'Count'
 
 # Create a bar chart with Altair
-chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:O', title=x_title, sort=alt.Sort(encoding='y', order='descending')),  # Fix the bars
-    y=alt.Y(f'{y_title}:Q', title=y_title),
-    color=alt.value('blue'),
-    tooltip=[x_title, y_title, alt.Tooltip('Expiration Date:T', format='%Y-%m-%d')]
-)
+if selected_option == 'Owner':
+    chart = alt.Chart(chart_df_owner).mark_bar().encode(
+        x=alt.X(f'{x_title_owner}:O', title=x_title_owner),
+        y=alt.Y(f'{y_title_owner}:Q', title=y_title_owner),
+        color=alt.value('blue'),
+        tooltip=[x_title_owner, y_title_owner]
+    )
+else:
+    chart = alt.Chart(chart_df).mark_bar().encode(
+        x=alt.X(f'{x_title}:O', title=x_title),
+        y=alt.Y(f'{y_title}:Q', title=y_title),
+        color=alt.value('blue'),
+        tooltip=[x_title, y_title, alt.Tooltip('Expiration Date:T', format='%Y-%m-%d')]
+    )
 
 # Apply changes only when 'Expiration Date' is chosen
 if selected_option == 'Expiration Date':
