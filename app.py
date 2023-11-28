@@ -69,6 +69,25 @@ def generate_product_code(article, owner):
         return article_code  # Return the generated article code
     else:
         return "Product not found or not supported"  # Return a message if the article is not found in product_details
+    
+#Decode function to decode the product code
+def decode_product_code(product_code):
+    product_number = product_code[:2]
+    expiration_date = product_code[2:10]
+    calories = product_code[10:14]
+    product_owner = product_code[14:]
+
+    product_number = int(product_number)
+    
+    expiration_date = (datetime.strptime(expiration_date,"%d%m%Y")).strftime("%d.%m.%Y")
+    calories = calories.lstrip("0")
+    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
+
+    return {
+        "Product Number": product_number,
+        "Expiration Date": expiration_date,
+        "Calories": calories,
+        "Product Owner": product_owner}
 
 #Visualization 
 
@@ -170,9 +189,9 @@ if confirm_button:
 
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button: 
-    st.write(inventory_list)
-        
-        
+    decode_product_code(product_code)
+
+
 
 get_product_code_button = st.button("generate product code")
 
