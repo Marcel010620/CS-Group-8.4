@@ -293,12 +293,6 @@ elif selected_option == 'Article':
     chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
 
-elif selected_option == 'Expiration Date':
-    # Create a new DataFrame for the selected Expiration Date
-    next_7_days = [datetime.now() + timedelta(days=i) for i in range(7)]
-    next_7_days_str = [date.date() for date in next_7_days]
-    chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_7_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
-    x_title, y_title = 'Expiration Date', 'Count'
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
@@ -308,16 +302,6 @@ chart = alt.Chart(chart_df).mark_bar().encode(
     tooltip=[x_title, y_title, alt.Tooltip('Expiration Date:T', format='%Y-%m-%d')]
 )
 
-# Apply changes only when 'Expiration Date' is chosen
-if selected_option == 'Expiration Date':
-    chart = chart.transform_aggregate(
-        Count='sum(Count)',
-        groupby=['Expiration Date']
-    ).transform_calculate(
-        Count='datum.Count'
-    ).encode(
-        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m'), scale=alt.Scale(domain='unique')),
-    )
 
 # Set chart properties
 chart = chart.properties(
