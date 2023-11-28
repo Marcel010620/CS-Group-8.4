@@ -59,6 +59,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import streamlit as st
 import altair as alt
+import random
 
 # Sample data for different selections
 data = {
@@ -66,27 +67,19 @@ data = {
     'Quantity': [10, 5, 7, 3, 2, 4, 6],
     'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit'],
     'Owner': ['A', 'A', 'C', 'A', 'B', 'A', 'B'],
-    'Expiration Date': [
-        datetime(2023, 12, 1),
-        datetime(2023, 12, 3),
-        datetime(2023, 12, 5),
-        datetime(2023, 11, 25),
-        datetime(2023, 12, 7),
-        datetime(2023, 12, 8),
-        datetime(2023, 12, 10),
-    ],
 }
 
-# Create a DataFrame with a separate row for each unit with its own expiration date
+# Create a DataFrame with a separate row for each unit and a random expiration date within the next 7 days
 rows = []
 for i in range(len(data['Article'])):
     for j in range(data['Quantity'][i]):
+        expiration_date = datetime.now() + timedelta(days=random.randint(1, 7))
         row = {
             'Article': data['Article'][i],
             'Quantity': 1,
             'Category': data['Category'][i],
             'Owner': data['Owner'][i],
-            'Expiration Date': data['Expiration Date'][i],
+            'Expiration Date': expiration_date,
         }
         rows.append(row)
 
@@ -112,10 +105,10 @@ elif selected_option == 'Article':
 
 elif selected_option == 'Expiration Date':
     # Create a new DataFrame for the selected Expiration Date
-    next_5_days = [datetime.now() + timedelta(days=i) for i in range(1, 6)]
-    next_5_days_str = [date.date() for date in next_5_days]
-    chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_5_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
-    chart_df = chart_df.head(5) if not chart_df.empty else chart_df  # Limit to 5 bars
+    next_7_days = [datetime.now() + timedelta(days=i) for i in range(1, 8)]
+    next_7_days_str = [date.date() for date in next_7_days]
+    chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_7_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
+    chart_df = chart_df.head(7) if not chart_df.empty else chart_df  # Limit to 7 bars
     x_title, y_title = 'Expiration Date', 'Count'
 
 # Create a bar chart with Altair
