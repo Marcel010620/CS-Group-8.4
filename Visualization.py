@@ -36,6 +36,9 @@ elif selected_option == 'Expiry Date':
     next_5_days_str = [date.date() for date in next_5_days]
     df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
     chart_df = df[df['Expiry Date'].dt.date.isin(next_5_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
+    chart_df = chart_df.head(5)  # Limit to 5 bars
+    x_title, y_title = 'Expiry Date', 'Count'
+
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
@@ -45,6 +48,19 @@ chart = alt.Chart(chart_df).mark_bar().encode(
     tooltip=[x_title, y_title, alt.Tooltip('Expiry Date:T', format='%Y-%m-%d')]
 )
 
+# Apply changes only when 'Expiry Date' is chosen
+if selected_option == 'Expiry Date':
+    chart = chart.transform_impute(
+        impute='Count',
+        key='Expiry Date',
+        value=0
+    ).encode(
+        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
+    ).transform_filter(
+        alt.datum.Count > 0
+    )
+
+
 # Set chart properties
 chart = chart.properties(
     width=400,
@@ -53,7 +69,6 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
-
 
 
 import streamlit as st
