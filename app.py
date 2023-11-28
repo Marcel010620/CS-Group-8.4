@@ -259,12 +259,6 @@ data = {
 owners = ['A', 'B', 'C']
 data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
-# Create a DataFrame with a separate row for each unit and a unique expiration date
-rows = []
-for i in range(len(data['Article'])):
-    units = data['Quantity'][i]
-    
-    rows.append(row)
 
 df = pd.DataFrame(rows)
 
