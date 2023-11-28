@@ -49,7 +49,7 @@ elif selected_option == 'Article':
 
 elif selected_option == 'Expiration Date':
     # Create a new DataFrame for the selected Expiration Date
-    next_7_days = [datetime.now() + timedelta(days=i) for i in range(1, 8)]
+    next_7_days = [datetime.now() + timedelta(days=i) for i in range(7)]
     next_7_days_str = [date.date() for date in next_7_days]
     chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_7_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
     x_title, y_title = 'Expiration Date', 'Count'
@@ -76,6 +76,7 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 import streamlit as st
 import pandas as pd
