@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -70,6 +69,7 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 
 import streamlit as st
