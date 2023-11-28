@@ -263,15 +263,6 @@ import streamlit as st
 import altair as alt
 import random
 
-# Sample data for different selections from the second code
-data = {
-    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
-    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
-}
-
-# Ensure there are 15 different articles and 3 owners
-owners = ['A', 'B', 'C']
-data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
 # Create a DataFrame with a separate row for each unit
 rows = []
@@ -293,79 +284,42 @@ expanded_df = df.explode('Owner')
 # Create a Streamlit app
 st.title('Fridge Overview')
 
-# Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
+# Buttons for adding and removing articles
+add_article_button = st.button("Add Article")
+remove_article_button = st.button("Remove Article")
+
+# Display the current data
+st.write("Current Data:")
+st.write(pd.DataFrame(data))
+
+# What happens if you press the add_article_button
+if add_article_button:
+    article_to_add = st.text_input("Enter the Article to add")
+    quantity_to_add = st.number_input("Enter the Quantity to add", min_value=1, value=1)
+    if article_to_add:
+        add_article(article_to_add, quantity_to_add)
+
+# What happens if you press the remove_article_button
+if remove_article_button:
+    article_to_remove = st.selectbox("Choose the Article to remove", data['Article'])
+    if article_to_remove:
+        remove_article(article_to_remove)
 
 # Create a DataFrame for Altair
-if selected_option == 'Owner':
-    chart_df = df.groupby('Owner').size().reset_index(name='Count')
-    x_title, y_title = 'Owner', 'Count'
-
-elif selected_option == 'Article':
-    chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
-    x_title, y_title = 'Article', 'Count'
+df = pd.DataFrame(data)
 
 # Create a bar chart with Altair
-chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:O', title=x_title),
-    y=alt.Y(f'{y_title}:Q', title=y_title),
+chart = alt.Chart(df).mark_bar().encode(
+    x='Article',
+    y='Quantity',
     color=alt.value('blue')
 )
 
 # Set chart properties
 chart = chart.properties(
     width=400,
-    title=f'Bar Chart - {selected_option}'
+    title='Bar Chart - Article Quantities'
 )
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
-
-
-import streamlit as st
-import pandas as pd
-from datetime import datetime, timedelta
-
-# Sample data
-data = {
-    'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Quantity': [10, 5, 7, 3, 2],
-    'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit'],
-    'Owner': ['A', 'A', 'C', 'A', 'B'],
-    'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
-}
-
-df = pd.DataFrame(data)
-
-# Create a Streamlit app
-st.title('Ownership')
-
-# Create a dropdown to select either "Owner" or "Expires soon"
-selection_option = st.selectbox('Select an option:', ['Owner', 'Expires soon'])
-
-# Display the selected option
-st.write(f'Selected option: {selection_option}')
-
-# Based on the selected option, create and display the corresponding list
-if selection_option == 'Owner':
-    owners_list = df['Owner'].unique()
-    selected_owner = st.selectbox('Select an owner:', owners_list)
-    st.write(f'Selected owner: {selected_owner}')
-    
-    # Filter and calculate total count of products belonging to the selected owner
-    owner_products = df[df['Owner'] == selected_owner]
-    total_count_dict = owner_products.groupby('Article')['Quantity'].sum().to_dict()
-    
-    st.write(f'Total count of products owned by {selected_owner}:')
-    
-    for article, total_count in total_count_dict.items():
-        st.write(f'{article}: {total_count}')
-
-elif selection_option == 'Expires soon':
-    expiration_threshold = datetime.now() + timedelta(days=2)
-    expiring_articles = df[df['Expiration Date'] <= expiration_threshold]['Article'].tolist()
-    st.write("Articles that expire soon:")
-    st.write(expiring_articles)
-
-
-    
