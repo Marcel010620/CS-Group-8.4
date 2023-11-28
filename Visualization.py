@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -34,10 +35,9 @@ elif selected_option == 'Article':
 elif selected_option == 'Expiry Date':
     next_5_days = [datetime.now() + timedelta(days=i) for i in range(1, 6)]
     next_5_days_str = [date.date() for date in next_5_days]
-
-    # Create a new DataFrame for the selected Expiry Date
+    df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
     chart_df = df[df['Expiry Date'].dt.date.isin(next_5_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
-    chart_df = chart_df.head(5) if not chart_df.empty else chart_df  # Limit to 5 bars if not empty
+    chart_df = chart_df.head(5)  # Limit to 5 bars
     x_title, y_title = 'Expiry Date', 'Count'
 
 
@@ -51,9 +51,16 @@ chart = alt.Chart(chart_df).mark_bar().encode(
 
 # Apply changes only when 'Expiry Date' is chosen
 if selected_option == 'Expiry Date':
-    chart = chart.encode(
+    chart = chart.transform_impute(
+        impute='Count',
+        key='Expiry Date',
+        value=0
+    ).encode(
         x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
+    ).transform_filter(
+        alt.datum.Count > 0
     )
+
 
 # Set chart properties
 chart = chart.properties(
