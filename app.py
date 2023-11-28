@@ -180,16 +180,19 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
         st.write("Removed owner:", removed_owner)
 
 
-inventory_list = []
+inventory_list = [] 
+
 confirm_button = st.button("Confirm")
 if confirm_button:
     product_code = generate_product_code(article, owner)
     inventory_list.append(product_code)
-    st.write(f'You added the product with follwing product code: {product_code}')
+    st.write(f'You added the product with following product code: {product_code}')
 
 show_inventory_button = st.button("Show Inventory")
-if show_inventory_button: 
-    decode_product_code(product_code)
+if show_inventory_button:
+    decoded_info = decode_product_code(product_code)
+    st.write("Decoded Product Information:")
+    st.write(decoded_info)
 
 
 
@@ -200,4 +203,3 @@ if get_product_code_button:
 
 
 
-    
