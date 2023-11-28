@@ -160,8 +160,7 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
 
- #Encode
-today = datetime.now().date()
+
 
 get_product_code_button = st.button("generate_product_code")
 
