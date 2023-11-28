@@ -7,6 +7,9 @@ import pandas as pd
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
 
+# Read the Product file
+df = pd.read_csv('products.csv')
+
 #initialize classes & sublcasses 
 class Product:
     def __init__(self, name, product_code, calories, expiry_days, quantity=1):
