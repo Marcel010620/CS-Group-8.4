@@ -282,7 +282,7 @@ expanded_df = df.explode('Expiration Date')
 st.title('Fridge Overview')
 
 # Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiration Date'])
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
 
 # Create a DataFrame for Altair
 if selected_option == 'Owner':
