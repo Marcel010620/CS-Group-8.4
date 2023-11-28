@@ -165,7 +165,7 @@ today = datetime.now().date()
 product_code = generate_product_code(article, owner)
 
 
-st.write(generate_product_code("Milk","B"))
+st.write(product_code)
 
         #--> Lisst append
     #Decode
