@@ -124,7 +124,7 @@ if remove_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
 if st.session_state.selected_options["show_select_boxes"]["remove_item_button"]:
-    remove_options_article = ["Pepper", "Milk"]  # This needs to be a list with all Products inside the fridge
+    remove_options_article = ["Peppers", "Milk"]  # This needs to be a list with all Products inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
 
