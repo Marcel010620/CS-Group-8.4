@@ -199,7 +199,5 @@ if get_product_code_button:
     st.write(generate_product_code(article, owner))
 
 
-        #--> Lisst append
-    #Decode
-        #--> Show item
-    #Visulization of product/items
+
+    
