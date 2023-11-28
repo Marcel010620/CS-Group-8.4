@@ -190,9 +190,8 @@ if confirm_button:
 
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
-    decoded_info = decode_product_code(product_code)
-    st.write("Decoded Product Information:")
-    st.write(decoded_info)
+    st.write = decode_product_code(product_code)
+
 
 
 
