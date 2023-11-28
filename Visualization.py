@@ -94,6 +94,18 @@ def decode_product_code(product_code):
         "Calories": calories,
         "Product Owner": product_owner}
 
+# Function to add a product to the inventory list
+@st.cache(allow_output_mutation=True)
+def add_product(product_code):
+    st.session_state.inventory_list.append(product_code)
+
+# Function to remove a product from the inventory list
+@st.cache(allow_output_mutation=True)
+def remove_product(product_code):
+    if product_code in st.session_state.inventory_list:
+        st.session_state.inventory_list.remove(product_code)
+
+
 
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
@@ -160,18 +172,19 @@ if st.session_state.selected_options["selected_button"] == "add_item_button":
     article = st.session_state.selected_options["Article"]
     owner = st.session_state.selected_options["Owner"]
 
-    # Confirm button
-    confirm_button = st.button("Confirm")
-    if confirm_button:
-        product_code = generate_product_code(article, owner)
-        st.session_state.inventory_list.append(product_code)
-        st.write(f'You added the product with the following product code: {product_code}')
+# Confirm button
+confirm_button = st.button("Confirm")
+if confirm_button:
+    product_code = generate_product_code(article, owner)
+    add_product(product_code)
+    st.write(f'You added the product with the following product code: {product_code}')
 
 
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["selected_button"] = "remove_item_button"
+
 
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
@@ -196,6 +209,9 @@ if st.session_state.selected_options["selected_button"] == "remove_item_button":
         "Choose the articles you want to remove", remove_options_article
     )
     st.write("You removed", removed_options_article)
+    removed_product_code = generate_product_code(removed_options_article, owner)
+    remove_product(removed_product_code)
+
 
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
