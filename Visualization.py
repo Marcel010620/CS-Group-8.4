@@ -1,26 +1,41 @@
-import streamlit as st
-import pandas as pd
-import altair as alt
 from datetime import datetime, timedelta
+import pandas as pd
+import streamlit as st
+import altair as alt
 import random
 
 # Sample data for different selections
-data_dict = {
-    'Owner': ['A', 'A', 'C', 'A', 'B', 'C', 'B', 'A', 'D', 'D', 'B', 'C', 'D', 'B', 'C'],
-    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Cherry', 'Apple', 'Orange', 'Grapes', 'Banana', 'Cherry', 'Orange', 'Grapes', 'Milk'],
+data = {
+    'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Grapes', 'Strawberry', 'Pineapple', 'Watermelon', 'Mango', 'Peach', 'Kiwi', 'Blueberry', 'Raspberry'],
+    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
+    'Category': ['Fruit'] * 15,
+    'Owner': ['A', 'B', 'C'] * 5,
 }
 
-# Make sure the number of expiry dates matches the number of articles
-expiry_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(len(data_dict['Article']))]
-data_dict['Expiry Date'] = [date.date() for date in expiry_dates]
+# Create a DataFrame with a separate row for each unit and a random expiration date within the next 7 days
+rows = []
+for i in range(len(data['Article'])):
+    for j in range(data['Quantity'][i]):
+        expiration_date = datetime.now() + timedelta(days=random.randint(1, 7))
+        row = {
+            'Article': data['Article'][i],
+            'Quantity': 1,
+            'Category': data['Category'][i],
+            'Owner': data['Owner'][i],
+            'Expiration Date': expiration_date,
+        }
+        rows.append(row)
 
-df = pd.DataFrame(data_dict)
+df = pd.DataFrame(rows)
+
+# Expand the DataFrame to have one row for each unique combination of Article and Expiration Date
+expanded_df = df.explode('Expiration Date')
 
 # Create a Streamlit app
 st.title('Fridge Overview')
 
 # Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiry Date'])
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiration Date'])
 
 # Create a DataFrame for Altair
 if selected_option == 'Owner':
@@ -28,38 +43,30 @@ if selected_option == 'Owner':
     x_title, y_title = 'Owner', 'Count'
 
 elif selected_option == 'Article':
-    chart_df = df.groupby('Article').size().reset_index(name='Count')
+    chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
 
-elif selected_option == 'Expiry Date':
-    next_5_days = [datetime.now() + timedelta(days=i) for i in range(1, 6)]
-    next_5_days_str = [date.date() for date in next_5_days]
-    df['Expiry Date'] = pd.to_datetime(df['Expiry Date'])
-    chart_df = df[df['Expiry Date'].dt.date.isin(next_5_days_str)].groupby('Expiry Date').size().reset_index(name='Count')
-    chart_df = chart_df.head(5)  # Limit to 5 bars
-    x_title, y_title = 'Expiry Date', 'Count'
-
+elif selected_option == 'Expiration Date':
+    # Create a new DataFrame for the selected Expiration Date
+    next_7_days = [datetime.now() + timedelta(days=i) for i in range(1, 8)]
+    next_7_days_str = [date.date() for date in next_7_days]
+    chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_7_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
+    chart_df = chart_df.head(7) if not chart_df.empty else chart_df  # Limit to 7 bars
+    x_title, y_title = 'Expiration Date', 'Count'
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
     x=alt.X(f'{x_title}:O', title=x_title),
     y=alt.Y(f'{y_title}:Q', title=y_title),
     color=alt.value('blue'),
-    tooltip=[x_title, y_title, alt.Tooltip('Expiry Date:T', format='%Y-%m-%d')]
+    tooltip=[x_title, y_title, alt.Tooltip('Expiration Date:T', format='%Y-%m-%d')]
 )
 
-# Apply changes only when 'Expiry Date' is chosen
-if selected_option == 'Expiry Date':
-    chart = chart.transform_impute(
-        impute='Count',
-        key='Expiry Date',
-        value=0
-    ).encode(
+# Apply changes only when 'Expiration Date' is chosen
+if selected_option == 'Expiration Date':
+    chart = chart.encode(
         x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
-    ).transform_filter(
-        alt.datum.Count > 0
     )
-
 
 # Set chart properties
 chart = chart.properties(
@@ -69,6 +76,7 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 
 import streamlit as st
