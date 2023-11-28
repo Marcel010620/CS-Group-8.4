@@ -18,12 +18,12 @@ data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 rows = []
 for i in range(len(data['Article'])):
     expiration_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(data['Quantity'][i])]
-    for j in range(data['Quantity'][i]):
+    for expiration_date in expiration_dates:
         row = {
             'Article': data['Article'][i],
             'Quantity': 1,
             'Owner': data['Owner'][i],
-            'Expiration Date': expiration_dates[j],
+            'Expiration Date': expiration_date,
         }
         rows.append(row)
 
