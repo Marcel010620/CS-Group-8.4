@@ -100,7 +100,7 @@ if add_item_button:
 
 # Show select boxes of the add_item_button if the flag of the add_item_button is True
 if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
-    options_Article = ["Pepper", "Milk", "Ham", "Cream"]
+    options_Article = ["Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots", "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad"]
     st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
                                                                 key="article_selectbox")
     st.write('You selected:', st.session_state.selected_options["Article"])
@@ -124,7 +124,7 @@ if remove_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
 if st.session_state.selected_options["show_select_boxes"]["remove_item_button"]:
-    remove_options_article = ["Pepper", "Milk"]  # This needs to be a list with all Products inside the fridge
+    remove_options_article = ["Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots", "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad"]  # This needs to be a list with all Products inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
 
@@ -162,7 +162,7 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
 
 
 
-get_product_code_button = st.button("generate_product_code")
+get_product_code_button = st.button("generate product code")
 
 if get_product_code_button: 
     st.write(generate_product_code(article, owner))
