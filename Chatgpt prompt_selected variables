@@ -1,9 +1,8 @@
- # ... (previous code)
-
+# ... (previous code)
 #Initalize Buttons 
 #Initalize the add_item button
-add_item_button = st.button("Add product")
-#set the other buttons to False
+add_item_button = col1.button("Add product")
+# Set the other buttons to False
 if add_item_button:
     st.session_state.selected_options["show_select_boxes"]["add_item_button"] = True
     # Reset other buttons
@@ -14,17 +13,21 @@ if add_item_button:
 # Show select boxes if the flag of the add_item_button is True
 if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
     options_Article = ["Pepper", "Milk"]
-    st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
-                                                                key="article_selectbox")
-    st.write('You selected:', st.session_state.selected_options["Article"])
+    selected_article = st.selectbox("Choose your Article", options_Article,
+                                    key="article_selectbox")
+    st.write('You selected:', selected_article)
 
     options_Owner = ["A", "B", "C"]
-    st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner,
-                                                              key="owner_selectbox")
-    st.write("You selected", st.session_state.selected_options["Owner"])
+    selected_owner = st.selectbox("Choose the Owner", options_Owner,
+                                  key="owner_selectbox")
+    st.write("You selected", selected_owner)
+
+    # Store the selected options in variables
+    st.session_state.selected_options["Article"] = selected_article
+    st.session_state.selected_options["Owner"] = selected_owner
 
 # What happens if you press the remove_item_button
-remove_item_button = st.button("Remove product")
+remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = True
     # Reset other buttons
@@ -33,10 +36,11 @@ if remove_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
 # What happens if you press the add_owner_button
-add_owner_button = st.button("Add owners")
+add_owner_button = col3.button("Add owners")
 if add_owner_button:
     st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = True
     # Reset other buttons
     st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
     st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
+
