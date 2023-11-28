@@ -64,8 +64,13 @@ chart = alt.Chart(chart_df).mark_bar().encode(
 
 # Apply changes only when 'Expiration Date' is chosen
 if selected_option == 'Expiration Date':
-    chart = chart.encode(
-        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m')),
+    chart = chart.transform_aggregate(
+        Count='sum(Count)',
+        groupby=['Expiration Date']
+    ).transform_calculate(
+        Count='datum.Count'
+    ).encode(
+        x=alt.X(f'{x_title}:T', title=x_title, axis=alt.Axis(labels=True, format='%d/%m'), scale=alt.Scale(domain='unique')),
     )
 
 # Set chart properties
