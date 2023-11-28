@@ -105,7 +105,7 @@ if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
                                                                 key="article_selectbox")
     st.write('You selected:', st.session_state.selected_options["Article"])
 
-    options_Owner = ["A", "B", "C"]
+    options_Owner = ["A", "B", "C", "D"]
     st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner,
                                                               key="owner_selectbox")
     st.write("You selected", st.session_state.selected_options["Owner"])
