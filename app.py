@@ -247,7 +247,7 @@ import streamlit as st
 import altair as alt
 import random
 
-# Visualization 
+# Visualization of the bar chart
 
 # Sample data for different selections from the second code
 data = {
