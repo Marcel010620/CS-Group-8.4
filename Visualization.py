@@ -4,7 +4,6 @@ import streamlit as st
 import altair as alt
 import random
 
-
 # Visualization 
 
 # Sample data for different selections from the second code
@@ -132,3 +131,8 @@ elif selection_option == 'Expires soon':
     expiring_articles = df[df['Expiration Date'] <= expiration_threshold]['Article'].tolist()
     st.write("Articles that expire soon:")
     st.write(expiring_articles)
+
+
+
+
+    
