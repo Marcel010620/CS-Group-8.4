@@ -14,16 +14,16 @@ data = {
 owners = ['A', 'B', 'C']
 data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
-# Create a DataFrame with a separate row for each unit and a random expiration date within the next 7 days
+# Create a DataFrame with a separate row for each unit and a unique expiration date
 rows = []
 for i in range(len(data['Article'])):
+    expiration_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(data['Quantity'][i])]
     for j in range(data['Quantity'][i]):
-        expiration_date = datetime.now() + timedelta(days=random.randint(1, 7))
         row = {
             'Article': data['Article'][i],
             'Quantity': 1,
             'Owner': data['Owner'][i],
-            'Expiration Date': expiration_date,
+            'Expiration Date': expiration_dates[j],
         }
         rows.append(row)
 
