@@ -40,7 +40,7 @@ def generate_product_code(article, owner):
         "Yogurt": {"Product_Code": "03", "calories": "0350", "Expiring_Days": 10},
         "Cheese": {"Product_Code": "04", "calories": "1200", "Expiring_Days": 15},
         "Cream": {"Product_Code": "05", "calories": "1500", "Expiring_Days": 12},
-        "Peppers": {"Product_Code": "06", "calories": "0250", "Expiring_Days": 5},
+        "Pepper": {"Product_Code": "06", "calories": "0250", "Expiring_Days": 5},
         "Sausage": {"Product_Code": "07", "calories": "1800", "Expiring_Days": 8},
         "Carrots": {"Product_Code": "08", "calories": "0300", "Expiring_Days": 14},
         "Cucumber": {"Product_Code": "09", "calories": "0100", "Expiring_Days": 5},
@@ -100,7 +100,7 @@ if add_item_button:
 
 # Show select boxes of the add_item_button if the flag of the add_item_button is True
 if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
-    options_Article = ["Peppers", "Milk"]
+    options_Article = ["Pepper", "Milk"]
     st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
                                                                 key="article_selectbox")
     st.write('You selected:', st.session_state.selected_options["Article"])
@@ -124,7 +124,7 @@ if remove_item_button:
     st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
 if st.session_state.selected_options["show_select_boxes"]["remove_item_button"]:
-    remove_options_article = ["Peppers", "Milk"]  # This needs to be a list with all Products inside the fridge
+    remove_options_article = ["Pepper", "Milk"]  # This needs to be a list with all Products inside the fridge
     removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
 
