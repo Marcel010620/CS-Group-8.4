@@ -245,9 +245,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import streamlit as st
 import altair as alt
-
-
-# Visualization of the bar chart
+import random
 
 # Sample data for different selections from the second code
 data = {
@@ -259,11 +257,22 @@ data = {
 owners = ['A', 'B', 'C']
 data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
+# Create a DataFrame with a separate row for each unit
+rows = []
+for i in range(len(data['Article'])):
+    units = data['Quantity'][i]
+    for _ in range(units):
+        row = {
+            'Article': data['Article'][i],
+            'Quantity': 1,  # Count each unit as 1
+            'Owner': data['Owner'][i],
+        }
+        rows.append(row)
 
 df = pd.DataFrame(rows)
 
-# Expand the DataFrame to have one row for each unique combination of Article and Expiration Date
-expanded_df = df.explode('Expiration Date')
+# Expand the DataFrame to have one row for each unique combination of Article and Owner
+expanded_df = df.explode('Owner')
 
 # Create a Streamlit app
 st.title('Fridge Overview')
@@ -280,15 +289,12 @@ elif selected_option == 'Article':
     chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
 
-
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
     x=alt.X(f'{x_title}:O', title=x_title),
     y=alt.Y(f'{y_title}:Q', title=y_title),
-    color=alt.value('blue'),
-    
+    color=alt.value('blue')
 )
-
 
 # Set chart properties
 chart = chart.properties(
@@ -298,6 +304,7 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 import streamlit as st
 import pandas as pd
