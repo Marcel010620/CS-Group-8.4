@@ -92,116 +92,72 @@ def decode_product_code(product_code):
 
 #Visualization 
 
-# Initialize session state to set buttons to a certain default state
+# Initialize  session state to set buttons to a certain defualt state 
 if "selected_options" not in st.session_state:
-    st.session_state.selected_options = {
-        "Article": None,
-        "Owner": None,
-        "selected_button": None,
-    }
+    st.session_state.selected_options = {"Article": None, "Owner": None, "show_select_boxes": {"add_item_button": False, "remove_item_button": False, "add_owner_button": False, "remove_owner_button": False}}
 
 # Insert the name of the fridge (for example, your WG Name)
 wg_name = st.text_input("Your WG name")
 
 # Display the title (name of the fridge) with a name given by a user input (style red)
-st.markdown(
-    f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>",
-    unsafe_allow_html=True,
-)
+st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
 
-# Initialize Buttons
+#Initalize Buttons 
 
 # Initialize 4 columns to order 4 buttons in a row
 col1, col2, col3, col4 = st.columns(4)
 
-# Initalize the add_item button
+#Initalize the add_item button
 add_item_button = col1.button("Add product")
 
-# Set the other buttons to False
+#set the other buttons to False
 if add_item_button:
-    st.session_state.selected_options["selected_button"] = "add_item_button"
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
-# Show select boxes and Confirm button if the "Add product" button is pressed
-if st.session_state.selected_options["selected_button"] == "add_item_button":
-    options_Article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
-    ]
-    st.session_state.selected_options["Article"] = st.selectbox(
-        "Choose your Article",
-        options_Article,
-        key="article_selectbox",
-    )
-    st.write("You selected:", st.session_state.selected_options["Article"])
+# Show select boxes of the add_item_button if the flag of the add_item_button is True
+if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
+    options_Article = ["Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots", "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad"]
+    st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
+                                                                key="article_selectbox")
+    st.write('You selected:', st.session_state.selected_options["Article"])
 
     options_Owner = ["A", "B", "C", "D"]
-    st.session_state.selected_options["Owner"] = st.selectbox(
-        "Choose the Owner", options_Owner, key="owner_selectbox"
-    )
+    st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner,
+                                                              key="owner_selectbox")
     st.write("You selected", st.session_state.selected_options["Owner"])
 
     # Store the selected options in variables
     article = st.session_state.selected_options["Article"]
     owner = st.session_state.selected_options["Owner"]
 
-    # Confirm button
-    confirm_slot = st.empty()  # Empty slot for the button
-    confirm_button = confirm_slot.button("Confirm")
-    if confirm_button:
-        product_code = generate_product_code(article, owner)
-        st.write(
-            f'You added the product with the following product code: {product_code}'
-        )
-
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
-    st.session_state.selected_options["selected_button"] = "remove_item_button"
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
-# Show select boxes if the "Remove product" button is pressed
-if st.session_state.selected_options["selected_button"] == "remove_item_button":
-    remove_options_article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
-    ]  # This needs to be a list with all Products inside the fridge
-    removed_options_article = st.selectbox(
-        "Choose the articles you want to remove", remove_options_article
-    )
+if st.session_state.selected_options["show_select_boxes"]["remove_item_button"]:
+    remove_options_article = ["Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots", "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad"]  # This needs to be a list with all Products inside the fridge
+    removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
 
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
 if add_owner_button:
-    st.session_state.selected_options["selected_button"] = "add_owner_button"
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = False
 
-# Show select boxes if the "Add owners" button is pressed
-if st.session_state.selected_options["selected_button"] == "add_owner_button":
+if st.session_state.selected_options["show_select_boxes"]["add_owner_button"]:
     new_owner = st.text_input("Enter new owner")
     if new_owner:
         st.session_state.selected_options["Owner"] = new_owner
@@ -210,17 +166,20 @@ if st.session_state.selected_options["selected_button"] == "add_owner_button":
 # What happens if you press the remove_owner_button
 remove_owner_button = col4.button("Remove owner")
 if remove_owner_button:
-    st.session_state.selected_options["selected_button"] = "remove_owner_button"
+    st.session_state.selected_options["show_select_boxes"]["remove_owner_button"] = True
+    # Reset other buttons
+    st.session_state.selected_options["show_select_boxes"]["add_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["remove_item_button"] = False
+    st.session_state.selected_options["show_select_boxes"]["add_owner_button"] = False
 
-# Show select boxes if the "Remove owner" button is pressed
-if st.session_state.selected_options["selected_button"] == "remove_owner_button":
+# Show select boxes if the flag is True
+if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]:
     owners_list = ["A", "B", "C"]  # Replace with your list of owners
-    removed_owner = st.selectbox(
-        "Choose the owner to remove", owners_list
-    )
+    removed_owner = st.selectbox("Choose the owner to remove", owners_list)
     if removed_owner:
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
+
 
 inventory_list = [] 
 
@@ -236,7 +195,3 @@ if show_inventory_button:
     inventory_df = pd.DataFrame({"Product Code": inventory_list})
     st.write("Inventory:")
     st.dataframe(inventory_df)
-
-
-
-
