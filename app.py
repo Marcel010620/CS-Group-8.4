@@ -229,12 +229,18 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
 # Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
-    st.write("Inventory:")
+    decoded_info_list = []
+
     for product_code in st.session_state.inventory_list:
         decoded_info = decode_product_code(product_code)
-        st.write(f"Product Code: {product_code}")
-        st.write("Decoded Info:")
-        st.write(decoded_info)
+        decoded_info_list.append(decoded_info)
+
+    # Create a DataFrame from the decoded information
+    inventory_df = pd.DataFrame(decoded_info_list)
+
+    # Display the inventory table
+    st.write("Inventory:")
+    st.table(inventory_df)
 
 
 
