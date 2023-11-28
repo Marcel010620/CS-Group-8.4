@@ -3,7 +3,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 
-# Initialize inventory list in session state
+# Initialize inventory list in session state in order to save data entries
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
 
