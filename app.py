@@ -92,6 +92,9 @@ def decode_product_code(product_code):
 
 #Visualization 
 
+# Inventory list
+inventory_list = []
+
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
     st.session_state.selected_options = {
@@ -158,10 +161,10 @@ if st.session_state.selected_options["selected_button"] == "add_item_button":
     owner = st.session_state.selected_options["Owner"]
 
     # Confirm button
-    confirm_slot = st.empty()  # Empty slot for the button
-    confirm_button = confirm_slot.button("Confirm")
+    confirm_button = st.button("Confirm")
     if confirm_button:
         product_code = generate_product_code(article, owner)
+        inventory_list.append(product_code)
         st.write(
             f'You added the product with the following product code: {product_code}'
         )
@@ -222,14 +225,7 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
 
-inventory_list = [] 
-
-confirm_button = st.button("Confirm")
-if confirm_button:
-    product_code = generate_product_code(article, owner)
-    inventory_list.append(product_code)
-    st.write(f'You added the product with following product code: {product_code}')
-
+# Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
     # Create a DataFrame to display the inventory
