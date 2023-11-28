@@ -8,9 +8,11 @@ import random
 data = {
     'Article': ['Apple', 'Orange', 'Cherry', 'Tomato', 'Elderberry', 'Banana', 'Grapes', 'Strawberry', 'Pineapple', 'Watermelon', 'Mango', 'Peach', 'Kiwi', 'Blueberry', 'Raspberry'],
     'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
-    'Category': ['Fruit'] * 15,
-    'Owner': ['A', 'B', 'C'] * 5,
 }
+
+# Ensure there are 15 different articles and 3 owners
+owners = ['A', 'B', 'C']
+data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
 # Create a DataFrame with a separate row for each unit and a random expiration date within the next 7 days
 rows = []
@@ -20,7 +22,6 @@ for i in range(len(data['Article'])):
         row = {
             'Article': data['Article'][i],
             'Quantity': 1,
-            'Category': data['Category'][i],
             'Owner': data['Owner'][i],
             'Expiration Date': expiration_date,
         }
@@ -76,7 +77,6 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
-
 
 
 import streamlit as st
