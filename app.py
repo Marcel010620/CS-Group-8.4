@@ -3,8 +3,9 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 
-# Inventory list
-inventory_list = []
+# Initialize inventory list in session state
+if "inventory_list" not in st.session_state:
+    st.session_state.inventory_list = []
 
 #initialize classes & sublcasses 
 class Product:
@@ -165,10 +166,9 @@ if st.session_state.selected_options["selected_button"] == "add_item_button":
     confirm_button = st.button("Confirm")
     if confirm_button:
         product_code = generate_product_code(article, owner)
-        inventory_list.append(product_code)
-        st.write(
-            f'You added the product with the following product code: {product_code}'
-        )
+        st.session_state.inventory_list.append(product_code)
+        st.write(f'You added the product with the following product code: {product_code}')
+
 
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
@@ -230,12 +230,11 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
     st.write("Inventory:")
-    for product_code in inventory_list:
+    for product_code in st.session_state.inventory_list:
         decoded_info = decode_product_code(product_code)
         st.write(f"Product Code: {product_code}")
         st.write("Decoded Info:")
         st.write(decoded_info)
-
 
 
 
