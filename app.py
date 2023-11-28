@@ -164,8 +164,14 @@ if st.session_state.selected_options["show_select_boxes"]["remove_owner_button"]
 today = datetime.now().date()
 product_code = generate_product_code(article, owner)
 
-
+print(product_code)
 st.write(product_code)
+
+get_product_code_button = st.button("generate_product_code")
+
+if get_product_code_button: 
+    st.write(generate_product_code(article, owner))
+
 
         #--> Lisst append
     #Decode
