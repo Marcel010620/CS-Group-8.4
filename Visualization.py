@@ -14,23 +14,23 @@ data = {
 owners = ['A', 'B', 'C']
 data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
-# Create a DataFrame with a separate row for each unit and a unique expiration date
-rows = []
-for i in range(len(data['Article'])):
-    expiration_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(data['Quantity'][i])]
-    for expiration_date in expiration_dates:
-        row = {
-            'Article': data['Article'][i],
-            'Quantity': 1,
-            'Owner': data['Owner'][i],
-            'Expiration Date': expiration_date,
-        }
-        rows.append(row)
+# Function to create the DataFrame with caching
+@st.cache
+def create_dataframe():
+    rows = []
+    for i in range(len(data['Article'])):
+        expiration_dates = [datetime.now() + timedelta(days=random.randint(1, 7)) for _ in range(data['Quantity'][i])]
+        for expiration_date in expiration_dates:
+            row = {
+                'Article': data['Article'][i],
+                'Quantity': 1,
+                'Owner': data['Owner'][i],
+                'Expiration Date': expiration_date,
+            }
+            rows.append(row)
 
-df = pd.DataFrame(rows)
-
-# Expand the DataFrame to have one row for each unique combination of Article and Expiration Date
-expanded_df = df.explode('Expiration Date')
+    df = pd.DataFrame(rows)
+    return df
 
 # Create a Streamlit app
 st.title('Fridge Overview')
@@ -40,16 +40,19 @@ selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expira
 
 # Create a DataFrame for Altair
 if selected_option == 'Owner':
-    # Store the DataFrame outside the block to keep it constant
-    chart_df_owner = df.groupby('Owner').size().reset_index(name='Count')
+    df_owner = create_dataframe()
+    chart_df_owner = df_owner.groupby('Owner').size().reset_index(name='Count')
     x_title_owner, y_title_owner = 'Owner', 'Count'
 
 elif selected_option == 'Article':
+    df = create_dataframe()
+    expanded_df = df.explode('Expiration Date')
     chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
 
 elif selected_option == 'Expiration Date':
-    # Create a new DataFrame for the selected Expiration Date
+    df = create_dataframe()
+    expanded_df = df.explode('Expiration Date')
     next_7_days = [datetime.now() + timedelta(days=i) for i in range(7)]
     next_7_days_str = [date.date() for date in next_7_days]
     chart_df = expanded_df[expanded_df['Expiration Date'].dt.date.isin(next_7_days_str)].groupby(['Expiration Date']).size().reset_index(name='Count')
