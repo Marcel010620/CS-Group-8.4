@@ -100,7 +100,7 @@ if add_item_button:
 
 # Show select boxes of the add_item_button if the flag of the add_item_button is True
 if st.session_state.selected_options["show_select_boxes"]["add_item_button"]:
-    options_Article = ["Pepper", "Milk"]
+    options_Article = ["Peppers", "Milk"]
     st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article,
                                                                 key="article_selectbox")
     st.write('You selected:', st.session_state.selected_options["Article"])
