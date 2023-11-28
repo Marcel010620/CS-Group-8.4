@@ -299,7 +299,7 @@ chart = alt.Chart(chart_df).mark_bar().encode(
     x=alt.X(f'{x_title}:O', title=x_title),
     y=alt.Y(f'{y_title}:Q', title=y_title),
     color=alt.value('blue'),
-    tooltip=[x_title, y_title, alt.Tooltip('Expiration Date:T', format='%Y-%m-%d')]
+    
 )
 
 
