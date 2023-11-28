@@ -3,6 +3,9 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 
+# Inventory list
+inventory_list = []
+
 #initialize classes & sublcasses 
 class Product:
     def __init__(self, name, product_code, calories, expiry_days, quantity=1):
@@ -92,8 +95,6 @@ def decode_product_code(product_code):
 
 #Visualization 
 
-# Inventory list
-inventory_list = []
 
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
