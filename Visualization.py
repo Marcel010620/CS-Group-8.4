@@ -1,4 +1,4 @@
-# Import relevant libraries
+#Import relevant libraries
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
@@ -8,9 +8,8 @@ import random
 # Initialize inventory list in session state
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
-    st.session_state.inventory_df = pd.DataFrame()
 
-# Initialize classes & subclasses
+#initialize classes & sublcasses 
 class Product:
     def __init__(self, name, product_code, calories, expiry_days, quantity=1):
         self.name = name
@@ -78,7 +77,7 @@ def generate_product_code(article, owner):
     else:
         return "Product not found or not supported"  # Return a message if the article is not found in product_details
     
-# Decode function to decode the product code
+#Decode function to decode the product code
 def decode_product_code(product_code):
     product_number = product_code[:2]
     expiration_date = product_code[2:10]
@@ -102,21 +101,12 @@ def decode_product_code(product_code):
 def add_product(product_code):
     st.session_state.inventory_list.append(product_code)
 
-    # Update quantity based on inventory
-    st.session_state.inventory_df = pd.DataFrame([decode_product_code(code) for code in st.session_state.inventory_list])
-    quantity = st.session_state.inventory_df.groupby('Article').size().get(article, default=0)
-    st.write(f'Total quantity of {article} in inventory: {quantity}')
-
 # Function to remove a product from the inventory list
 @st.cache(allow_output_mutation=True)
 def remove_product(product_code):
     if product_code in st.session_state.inventory_list:
         st.session_state.inventory_list.remove(product_code)
 
-        # Update quantity based on inventory
-        st.session_state.inventory_df = pd.DataFrame([decode_product_code(code) for code in st.session_state.inventory_list])
-        quantity = st.session_state.inventory_df.groupby('Article').size().get(removed_options_article, default=0)
-        st.write(f'Total quantity of {removed_options_article} in inventory: {quantity}')
 
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
@@ -140,7 +130,7 @@ st.markdown(
 # Initialize 4 columns to order 4 buttons in a row
 col1, col2, col3, col4 = st.columns(4)
 
-# Initialize the add_item button
+# Initalize the add_item button
 add_item_button = col1.button("Add product")
 
 # Set the other buttons to False
@@ -190,10 +180,12 @@ if confirm_button:
     add_product(product_code)
     st.write(f'You added the product with the following product code: {product_code}')
 
+
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["selected_button"] = "remove_item_button"
+
 
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
@@ -220,6 +212,7 @@ if st.session_state.selected_options["selected_button"] == "remove_item_button":
     st.write("You removed", removed_options_article)
     removed_product_code = generate_product_code(removed_options_article, owner)
     remove_product(removed_product_code)
+
 
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
