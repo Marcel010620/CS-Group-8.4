@@ -102,7 +102,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-## Initialize Buttons
+# Initialize Buttons
 col1, col2, col3, col4 = st.columns(4)
 add_item_button = col1.button("Add product")
 if add_item_button:
