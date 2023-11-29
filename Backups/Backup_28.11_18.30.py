@@ -7,7 +7,6 @@ from collections import defaultdict
 # Initialize inventory list in session state in order to save data entries
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
-st.session_state.inventory_list = st.session_state.inventory_list  # Initialize or retrieve the value
 
 # Read the Product file
 df = pd.read_csv('products.csv')
