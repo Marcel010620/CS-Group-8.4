@@ -1,4 +1,4 @@
-#Import relevant libraries
+# Import relevant libraries
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
@@ -6,11 +6,11 @@ from collections import defaultdict
 import altair as alt
 import random
 
-# Initialize inventory list in session state in order to save data entries
+# Initialize inventory list in session state to save data entries
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
 
-#initialize classes & sublcasses 
+# Define the Product class
 class Product:
     def __init__(self, name, product_code, calories, expiry_days, quantity=1):
         self.name = name
@@ -19,7 +19,9 @@ class Product:
         self.expiry_days = expiry_days
         self.quantity = quantity
 
+# Function to generate a product code based on the article and owner
 def generate_product_code(article, owner):
+    # Product details dictionary with codes, calories, and expiration days
     product_details = {
         "Milk": {"Product_Code": "01", "calories": "0400", "Expiring_Days": 7},
         "Ham": {"Product_Code": "02", "calories": "0900", "Expiring_Days": 5},
@@ -40,23 +42,22 @@ def generate_product_code(article, owner):
 
     today = datetime.today()
 
+     # Check if the selected article is in the product_details dictionary
     if article in product_details:
         product_info = product_details[article]
-        product_code = product_info["Product_Code"]  # Extract the product code
-        calories = product_info["calories"]          # Extract the calories information
-        # Calculate the expiration date based on the current date and the expiration days for the product
+        product_code = product_info["Product_Code"]
+        calories = product_info["calories"]
         expiring_date = (today + timedelta(days=product_info["Expiring_Days"])).strftime("%d%m%Y")
         owner_mapping = {"A": "01", "B": "02", "C": "03"}
-        # Get the owner number corresponding to the provided owner ('A', 'B', or 'C') or set a default value
-        owner_nr = owner_mapping.get(owner, "00")  # Default owner number if not 'A', 'B', or 'C'
+        owner_nr = owner_mapping.get(owner, "00")
 
         # Generate the article code by concatenating different information elements
         article_code = str(product_code + expiring_date + calories + owner_nr)
-        return article_code  # Return the generated article code
+        return article_code
     else:
-        return "Product not found or not supported"  # Return a message if the article is not found in product_details
-    
-#Decode function to decode the product code
+        return "Product not found or not supported"
+
+# Decode function to decode the product code
 def decode_product_code(product_code):
     product_number = product_code[:2]
     expiration_date = product_code[2:10]
@@ -65,7 +66,7 @@ def decode_product_code(product_code):
 
     product_number = int(product_number)
     
-    expiration_date = (datetime.strptime(expiration_date,"%d%m%Y")).strftime("%d.%m.%Y")
+    expiration_date = (datetime.strptime(expiration_date, "%d%m%Y")).strftime("%d.%m.%Y")
     calories = calories.lstrip("0")
     product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
 
@@ -73,8 +74,8 @@ def decode_product_code(product_code):
         "Product Number": product_number,
         "Expiration Date": expiration_date,
         "Calories": calories,
-        "Product Owner": product_owner}
-
+        "Product Owner": product_owner
+    }
 
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
@@ -84,101 +85,51 @@ if "selected_options" not in st.session_state:
         "selected_button": None,
     }
 
-# Insert the name of the fridge (for example, your WG Name)
+# Input the name of the fridge
 wg_name = st.text_input("Your WG name")
 
-# Display the title (name of the fridge) with a name given by a user input (style red)
-st.markdown(
-    f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>",
-    unsafe_allow_html=True,
-)
+# Display the title (name of the fridge) with a name given by a user input
+st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
 
-# Initialize Buttons
-
-# Initialize 4 columns to order 4 buttons in a row
+# Initialize buttons
 col1, col2, col3, col4 = st.columns(4)
 
-# Initalize the add_item button
+# Add product button
 add_item_button = col1.button("Add product")
-
-# Set the other buttons to False
 if add_item_button:
     st.session_state.selected_options["selected_button"] = "add_item_button"
 
 # Show select boxes and Confirm button if the "Add product" button is pressed
 if st.session_state.selected_options["selected_button"] == "add_item_button":
-    options_Article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
-    ]
-    st.session_state.selected_options["Article"] = st.selectbox(
-        "Choose your Article",
-        options_Article,
-        key="article_selectbox",
-    )
+    options_Article = [...]
+    st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article, key="article_selectbox")
     st.write("You selected:", st.session_state.selected_options["Article"])
 
-    options_Owner = ["A", "B", "C", "D"]
-    st.session_state.selected_options["Owner"] = st.selectbox(
-        "Choose the Owner", options_Owner, key="owner_selectbox"
-    )
+    options_Owner = [...]
+    st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner, key="owner_selectbox")
     st.write("You selected", st.session_state.selected_options["Owner"])
 
-    # Store the selected options in variables
     article = st.session_state.selected_options["Article"]
     owner = st.session_state.selected_options["Owner"]
 
-    # Confirm button
     confirm_button = st.button("Confirm")
     if confirm_button:
         product_code = generate_product_code(article, owner)
         st.session_state.inventory_list.append(product_code)
         st.write(f'You added the product with the following product code: {product_code}')
 
-
-# What happens if you press the remove_item_button
+# Remove product button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["selected_button"] = "remove_item_button"
 
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
-    remove_options_article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
-    ]  # This needs to be a list with all Products inside the fridge
-    removed_options_article = st.selectbox(
-        "Choose the articles you want to remove", remove_options_article
-    )
+    remove_options_article = [...]
+    removed_options_article = st.selectbox("Choose the articles you want to remove", remove_options_article)
     st.write("You removed", removed_options_article)
 
-# What happens if you press the add_owner_button
+# Add owner button
 add_owner_button = col3.button("Add owners")
 if add_owner_button:
     st.session_state.selected_options["selected_button"] = "add_owner_button"
@@ -190,35 +141,31 @@ if st.session_state.selected_options["selected_button"] == "add_owner_button":
         st.session_state.selected_options["Owner"] = new_owner
         st.write("New owner added:", new_owner)
 
-# What happens if you press the remove_owner_button
+# Remove owner button
 remove_owner_button = col4.button("Remove owner")
 if remove_owner_button:
     st.session_state.selected_options["selected_button"] = "remove_owner_button"
 
 # Show select boxes if the "Remove owner" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_owner_button":
-    owners_list = ["A", "B", "C"]  # Replace with your list of owners
-    removed_owner = st.selectbox(
-        "Choose the owner to remove", owners_list
-    )
+    owners_list = [...]
+    removed_owner = st.selectbox("Choose the owner to remove", owners_list)
     if removed_owner:
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
 
-## Show Inventory button
+# Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
-    # Create a defaultdict to store the product codes for each owner and product
     owner_product_codes = defaultdict(lambda: defaultdict(list))
 
-    # Iterate through the decoded_info_dict in session state
-    for product_code, decoded_info in st.session_state.decoded_info_dict.items():
+    for product_code in st.session_state.inventory_list:
+        decoded_info = decode_product_code(product_code)
         owner = decoded_info["Product Owner"]
         product_number = decoded_info["Product Number"]
         expiration_date = decoded_info["Expiration Date"]
         owner_product_codes[owner][product_number].append((product_code, expiration_date))
 
-    # Display the results
     for owner, product_codes in owner_product_codes.items():
         st.write(f"Owner {owner} possesses the following products:")
         for product_number, codes_and_dates in product_codes.items():
