@@ -63,24 +63,13 @@ def generate_product_code(article, owner):
 def decode_product_code(product_code):
     # ... (your decode function)
 
-# Function to add a product to the inventory list
-    @st.cache(allow_output_mutation=True)
-    def add_product(product_code):
-        st.session_state.inventory_list.append(product_code)
-
-# Function to remove a product from the inventory list
-    @st.cache(allow_output_mutation=True)
-    def remove_product(product_code):
-        if product_code in st.session_state.inventory_list:
-            st.session_state.inventory_list.remove(product_code)
-
 # Initialize session state to set buttons to a certain default state
-if "selected_options" not in st.session_state:
-    st.session_state.selected_options = {
-        "Article": None,
-        "Owner": None,
-        "selected_button": None,
-    }
+    if "selected_options" not in st.session_state:
+        st.session_state.selected_options = {
+            "Article": None,
+            "Owner": None,
+            "selected_button": None,
+        }
 
 # Insert the name of the fridge
 wg_name = st.text_input("Your WG name")
@@ -148,6 +137,17 @@ if st.session_state.selected_options["selected_button"] == "remove_item_button":
     st.write("You removed", removed_options_article)
     removed_product_code = generate_product_code(removed_options_article, owner)
     remove_product(removed_product_code)
+
+    # Function to add a product to the inventory list
+    @st.cache(allow_output_mutation=True)
+    def add_product(product_code):
+        st.session_state.inventory_list.append(product_code)
+
+# Function to remove a product from the inventory list
+    @st.cache(allow_output_mutation=True)
+    def remove_product(product_code):
+        if product_code in st.session_state.inventory_list:
+            st.session_state.inventory_list.remove(product_code)
 
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
