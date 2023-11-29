@@ -251,25 +251,6 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
 # Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
-    # Create a DataFrame for Altair
-    chart_df = st.session_state.inventory_df.groupby('Article').size().reset_index(name='Count')
-
-    # Create a bar chart with Altair
-    chart = alt.Chart(chart_df).mark_bar().encode(
-        x=alt.X('Article:O', title='Article'),
-        y=alt.Y('Count:Q', title='Count'),
-        color=alt.value('blue')
-    )
-
-    # Set chart properties
-    chart = chart.properties(
-        width=400,
-        title=f'Bar Chart - Quantity by Article'
-    )
-
-    # Display the bar chart using Streamlit
-    st.altair_chart(chart, use_container_width=True)
-
     decoded_info_list = []
 
     for product_code in st.session_state.inventory_list:
@@ -283,36 +264,28 @@ if show_inventory_button:
     st.write("Inventory:")
     st.table(inventory_df)
 
-# Create a Streamlit app
-st.title('Fridge Overview')
+    # Create a DataFrame for Altair
+    chart_df = inventory_df.groupby('Article').size().reset_index(name='Count')
 
-# Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
+    try:
+        # Create a bar chart with Altair
+        chart = alt.Chart(chart_df).mark_bar().encode(
+            x=alt.X('Article:O', title='Article'),
+            y=alt.Y('Count:Q', title='Count'),
+            color=alt.value('blue')
+        )
 
-# Create a DataFrame for Altair
-if selected_option == 'Owner':
-    chart_df = st.session_state.inventory_df.groupby('Owner').size().reset_index(name='Count')
-    x_title, y_title = 'Owner', 'Count'
+        # Set chart properties
+        chart = chart.properties(
+            width=400,
+            title=f'Bar Chart - Quantity by Article'
+        )
 
-elif selected_option == 'Article':
-    chart_df = st.session_state.inventory_df.explode('Owner').groupby('Article').size().reset_index(name='Count')
-    x_title, y_title = 'Article', 'Count'
+        # Display the bar chart using Streamlit
+        st.altair_chart(chart, use_container_width=True)
 
-# Create a bar chart with Altair
-chart = alt.Chart(chart_df).mark_bar().encode(
-    x=alt.X(f'{x_title}:O', title=x_title),
-    y=alt.Y(f'{y_title}:Q', title=y_title),
-    color=alt.value('blue')
-)
-
-# Set chart properties
-chart = chart.properties(
-    width=400,
-    title=f'Bar Chart - {selected_option}'
-)
-
-# Display the bar chart using Streamlit
-st.altair_chart(chart, use_container_width=True)
+    except KeyError as e:
+        st.error(f"An error occurred: {e}")
 
 
 import streamlit as st
