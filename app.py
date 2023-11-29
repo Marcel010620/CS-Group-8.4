@@ -97,32 +97,21 @@ wg_name = st.text_input("Your WG name")
 # Display the title (name of the fridge) with a name given by a user input
 st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
 
-# Initialize buttons
+# Initialize 4 columns to order 4 buttons in a row
 col1, col2, col3, col4 = st.columns(4)
 
-# Add product button
+# Initialize the add_item button
 add_item_button = col1.button("Add product")
-iif add_item_button:
+
+# Set the other buttons to False
+if add_item_button:
     st.session_state.selected_options["selected_button"] = "add_item_button"
 
 # Show select boxes and Confirm button if the "Add product" button is pressed
 if st.session_state.selected_options["selected_button"] == "add_item_button":
     options_Article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
+        "Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots",
+        "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad",
     ]
     st.session_state.selected_options["Article"] = st.selectbox(
         "Choose your Article",
@@ -137,17 +126,17 @@ if st.session_state.selected_options["selected_button"] == "add_item_button":
     )
     st.write("You selected", st.session_state.selected_options["Owner"])
 
-    # Store the selected options in variables
-    article = st.session_state.selected_options["Article"]
-    owner = st.session_state.selected_options["Owner"]
-
     # Confirm button
     confirm_button = st.button("Confirm")
     if confirm_button:
-        product_code = generate_product_code(article, owner)
+        product_code = generate_product_code(
+            st.session_state.selected_options["Article"],
+            st.session_state.selected_options["Owner"]
+        )
         st.session_state.inventory_list.append(product_code)
         st.write(f'You added the product with the following product code: {product_code}')
-
+        # Reset the selected button state after adding the article
+        st.session_state.selected_options["selected_button"] = None
 
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
@@ -158,17 +147,17 @@ if remove_item_button:
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
     # Display only the articles present in the inventory_list
     remove_options_article = st.session_state.inventory_list
-    removed_options_article = st.selectbox(
+    st.session_state.selected_options["Remove Article"] = st.selectbox(
         "Choose the articles you want to remove", remove_options_article
     )
-    st.write("You removed", removed_options_article)
+    st.write("You selected", st.session_state.selected_options["Remove Article"])
 
     # Confirm button for removing the selected article
     confirm_remove_button = st.button("Confirm Remove")
     if confirm_remove_button:
         # Remove the selected article from the inventory_list
-        st.session_state.inventory_list.remove(removed_options_article)
-        st.write(f'You removed the product with the following product code: {removed_options_article}')
+        st.session_state.inventory_list.remove(st.session_state.selected_options["Remove Article"])
+        st.write(f'You removed the product with the following product code: {st.session_state.selected_options["Remove Article"]}')
         # Reset the selected button state after removing the article
         st.session_state.selected_options["selected_button"] = None
 
