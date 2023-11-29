@@ -102,14 +102,27 @@ col1, col2, col3, col4 = st.columns(4)
 
 # Add product button
 add_item_button = col1.button("Add product")
-if add_item_button:
+iif add_item_button:
     st.session_state.selected_options["selected_button"] = "add_item_button"
 
 # Show select boxes and Confirm button if the "Add product" button is pressed
 if st.session_state.selected_options["selected_button"] == "add_item_button":
     options_Article = [
-        "Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots",
-        "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad",
+        "Milk",
+        "Ham",
+        "Yogurt",
+        "Cheese",
+        "Cream",
+        "Pepper",
+        "Sausage",
+        "Carrots",
+        "Cucumber",
+        "Chocolate",
+        "Cake",
+        "Butter",
+        "Apple",
+        "Strawberries",
+        "Salad",
     ]
     st.session_state.selected_options["Article"] = st.selectbox(
         "Choose your Article",
@@ -129,33 +142,35 @@ if st.session_state.selected_options["selected_button"] == "add_item_button":
     owner = st.session_state.selected_options["Owner"]
 
     # Confirm button
-    confirm_button = st.button("Confirm Add")
+    confirm_button = st.button("Confirm")
     if confirm_button:
         product_code = generate_product_code(article, owner)
         st.session_state.inventory_list.append(product_code)
         st.write(f'You added the product with the following product code: {product_code}')
-        # Reset the selected button state after adding the article
-        st.session_state.selected_options["selected_button"] = None
 
-# Remove product button
+
+# What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["selected_button"] = "remove_item_button"
 
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
-    # Display a select box with only the products in the inventory_list
-    selected_article = st.selectbox("Select an article to remove", st.session_state.inventory_list)
-    st.write(f"You selected: {selected_article}")
+    # Display only the articles present in the inventory_list
+    remove_options_article = st.session_state.inventory_list
+    removed_options_article = st.selectbox(
+        "Choose the articles you want to remove", remove_options_article
+    )
+    st.write("You removed", removed_options_article)
 
-    # Display a confirm button to remove the selected article
+    # Confirm button for removing the selected article
     confirm_remove_button = st.button("Confirm Remove")
     if confirm_remove_button:
-        if selected_article in st.session_state.inventory_list:
-            st.session_state.inventory_list.remove(selected_article)
-            st.write(f'The product with the product code {selected_article} has been removed from the inventory.')
-            # Reset the selected button state after removing the article
-            st.session_state.selected_options["selected_button"] = None
+        # Remove the selected article from the inventory_list
+        st.session_state.inventory_list.remove(removed_options_article)
+        st.write(f'You removed the product with the following product code: {removed_options_article}')
+        # Reset the selected button state after removing the article
+        st.session_state.selected_options["selected_button"] = None
 
 # Add owner button
 add_owner_button = col3.button("Add owners")
