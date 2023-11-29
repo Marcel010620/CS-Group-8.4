@@ -7,6 +7,12 @@ from collections import defaultdict
 def initialize_session_state():
     if "inventory_list" not in st.session_state:
         st.session_state.inventory_list = []
+    if "selected_options" not in st.session_state:
+        st.session_state.selected_options = {
+            "Article": None,
+            "Owner": None,
+            "selected_button": None,
+        }
 
 # Function to generate product code
 def generate_product_code(article, owner):
@@ -96,7 +102,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Initialize Buttons
+## Initialize Buttons
 col1, col2, col3, col4 = st.columns(4)
 add_item_button = col1.button("Add product")
 if add_item_button:
