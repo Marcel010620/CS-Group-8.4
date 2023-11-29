@@ -131,14 +131,16 @@ if remove_item_button:
 
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
-    # Display a select box with all products in the inventory_list
+    # Display a select box with only the products in the inventory_list
     selected_article = st.selectbox("Select an article to remove", st.session_state.inventory_list)
     st.write(f"You selected: {selected_article}")
-    
+
     # Display a confirm button to remove the selected article
     confirm_remove_button = st.button("Confirm Remove")
     if confirm_remove_button:
-        remove_item(selected_article)
+        if selected_article in st.session_state.inventory_list:
+            st.session_state.inventory_list.remove(selected_article)
+            st.write(f'The product with the product code {selected_article} has been removed from the inventory.')
 
 # Add owner button
 add_owner_button = col3.button("Add owners")
