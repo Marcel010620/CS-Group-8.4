@@ -107,22 +107,35 @@ if add_item_button:
 
 # Show select boxes and Confirm button if the "Add product" button is pressed
 if st.session_state.selected_options["selected_button"] == "add_item_button":
-    options_Article = [...]
-    st.session_state.selected_options["Article"] = st.selectbox("Choose your Article", options_Article, key="article_selectbox")
+    options_Article = [
+        "Milk", "Ham", "Yogurt", "Cheese", "Cream", "Pepper", "Sausage", "Carrots",
+        "Cucumber", "Chocolate", "Cake", "Butter", "Apple", "Strawberries", "Salad",
+    ]
+    st.session_state.selected_options["Article"] = st.selectbox(
+        "Choose your Article",
+        options_Article,
+        key="article_selectbox",
+    )
     st.write("You selected:", st.session_state.selected_options["Article"])
 
-    options_Owner = [...]
-    st.session_state.selected_options["Owner"] = st.selectbox("Choose the Owner", options_Owner, key="owner_selectbox")
+    options_Owner = ["A", "B", "C", "D"]
+    st.session_state.selected_options["Owner"] = st.selectbox(
+        "Choose the Owner", options_Owner, key="owner_selectbox"
+    )
     st.write("You selected", st.session_state.selected_options["Owner"])
 
+    # Store the selected options in variables
     article = st.session_state.selected_options["Article"]
     owner = st.session_state.selected_options["Owner"]
 
-    confirm_button = st.button("Confirm")
+    # Confirm button
+    confirm_button = st.button("Confirm Add")
     if confirm_button:
         product_code = generate_product_code(article, owner)
         st.session_state.inventory_list.append(product_code)
         st.write(f'You added the product with the following product code: {product_code}')
+        # Reset the selected button state after adding the article
+        st.session_state.selected_options["selected_button"] = None
 
 # Remove product button
 remove_item_button = col2.button("Remove product")
