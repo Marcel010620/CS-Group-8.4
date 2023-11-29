@@ -141,6 +141,8 @@ if st.session_state.selected_options["selected_button"] == "remove_item_button":
         if selected_article in st.session_state.inventory_list:
             st.session_state.inventory_list.remove(selected_article)
             st.write(f'The product with the product code {selected_article} has been removed from the inventory.')
+            # Reset the selected button state after removing the article
+            st.session_state.selected_options["selected_button"] = None
 
 # Add owner button
 add_owner_button = col3.button("Add owners")
