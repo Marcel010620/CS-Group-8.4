@@ -257,52 +257,75 @@ if show_inventory_button:
     st.table(inventory_df)
 
 
-from datetime import datetime, timedelta
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import altair as alt
-import random
+from datetime import datetime, timedelta
 
-# Sample data for different selections from the second code
-data = {
-    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
-    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
-}
+# Function to add an article to the inventory with caching
+@st.cache(allow_output_mutation=True)
+def add_article_to_inventory(article, owner):
+    today = datetime.today()
+    product_code = generate_product_code(article, owner)
+    expiration_date = (today + timedelta(days=7)).strftime("%Y-%m-%d")  # Example expiration date (7 days from today)
 
-# Ensure there are 15 different articles and 3 owners
-owners = ['A', 'B', 'C']
-data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
+    row = {
+        'Article': article,
+        'Quantity': 1,  # Count each unit as 1
+        'Owner': owner,
+        'Expiration Date': expiration_date,
+    }
 
-# Create a DataFrame with a separate row for each unit
-rows = []
-for i in range(len(data['Article'])):
-    units = data['Quantity'][i]
-    for _ in range(units):
-        row = {
-            'Article': data['Article'][i],
-            'Quantity': 1,  # Count each unit as 1
-            'Owner': data['Owner'][i],
-        }
-        rows.append(row)
+    inventory_df = pd.DataFrame([row])
+    st.session_state.inventory_df = pd.concat([st.session_state.inventory_df, inventory_df], ignore_index=True)
 
-df = pd.DataFrame(rows)
+# Function to remove an article from the inventory with caching
+@st.cache(allow_output_mutation=True)
+def remove_article_from_inventory(article):
+    st.session_state.inventory_df = st.session_state.inventory_df[st.session_state.inventory_df['Article'] != article]
 
-# Expand the DataFrame to have one row for each unique combination of Article and Owner
-expanded_df = df.explode('Owner')
+# Function to generate a product code
+def generate_product_code(article, owner):
+    # Implementation of generate_product_code function (as provided in the previous conversation)
+    # ...
+
+# Initialize session state for inventory DataFrame
+    if "inventory_df" not in st.session_state:
+        st.session_state.inventory_df = pd.DataFrame()
 
 # Create a Streamlit app
 st.title('Fridge Overview')
 
+# Buttons for adding and removing articles
+add_article_button = st.button("Add Article to Inventory")
+remove_article_button = st.button("Remove Article from Inventory")
+
+# Display the current inventory data
+st.write("Current Inventory:")
+st.write(st.session_state.inventory_df)
+
+# What happens if you press the add_article_button
+if add_article_button:
+    article_to_add = st.text_input("Enter the Article to add")
+    owner_to_add = st.selectbox("Choose the Owner", ['A', 'B', 'C'])
+    if article_to_add:
+        add_article_to_inventory(article_to_add, owner_to_add)
+
+# What happens if you press the remove_article_button
+if remove_article_button:
+    article_to_remove = st.selectbox("Choose the Article to remove", st.session_state.inventory_df['Article'].unique())
+    if article_to_remove:
+        remove_article_from_inventory(article_to_remove)
+
 # Create a dropdown to select an option
 selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
 
-# Create a DataFrame for Altair
+# Create a DataFrame for Altair based on the selected option
 if selected_option == 'Owner':
-    chart_df = df.groupby('Owner').size().reset_index(name='Count')
+    chart_df = st.session_state.inventory_df.groupby('Owner').size().reset_index(name='Count')
     x_title, y_title = 'Owner', 'Count'
-
 elif selected_option == 'Article':
-    chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
+    chart_df = st.session_state.inventory_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
 
 # Create a bar chart with Altair
@@ -315,7 +338,7 @@ chart = alt.Chart(chart_df).mark_bar().encode(
 # Set chart properties
 chart = chart.properties(
     width=400,
-    title=f'Bar Chart - {selected_option}'
+    title=f'Bar Chart - {selected_option} Quantities in Inventory'
 )
 
 # Display the bar chart using Streamlit
