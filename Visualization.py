@@ -263,6 +263,15 @@ import streamlit as st
 import altair as alt
 import random
 
+# Sample data for different selections from the second code
+data = {
+    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
+    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
+}
+
+# Ensure there are 15 different articles and 3 owners
+owners = ['A', 'B', 'C']
+data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
 
 # Create a DataFrame with a separate row for each unit
 rows = []
@@ -311,6 +320,7 @@ chart = chart.properties(
 
 # Display the bar chart using Streamlit
 st.altair_chart(chart, use_container_width=True)
+
 
 
 import streamlit as st
