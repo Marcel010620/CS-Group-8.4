@@ -320,7 +320,7 @@ from datetime import datetime, timedelta
 # Sample data
 data = {
     'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Quantity': [10, 5, 7, 3, 2],
+    'Quantity': count_owner_product_codes,
     'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit'],
     'Owner': ['A', 'A', 'C', 'A', 'B'],
     'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
