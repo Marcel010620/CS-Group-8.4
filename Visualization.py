@@ -1,15 +1,14 @@
-#Import relevant libraries
+# Import relevant libraries
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 import altair as alt
-import random
 
 # Initialize inventory list in session state
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
 
-#initialize classes & sublcasses 
+# Initialize classes & subclasses
 class Product:
     def __init__(self, name, product_code, calories, expiry_days, quantity=1):
         self.name = name
@@ -39,74 +38,41 @@ class ApartmentFridge:
             for product in products:
                 print(f" - {product.name} ({product.quantity} pieces)")
 
-
+# Function to generate product code
 def generate_product_code(article, owner):
     product_details = {
-        "Milk": {"Product_Code": "01", "calories": "0400", "Expiring_Days": 7},
-        "Ham": {"Product_Code": "02", "calories": "0900", "Expiring_Days": 5},
-        "Yogurt": {"Product_Code": "03", "calories": "0350", "Expiring_Days": 10},
-        "Cheese": {"Product_Code": "04", "calories": "1200", "Expiring_Days": 15},
-        "Cream": {"Product_Code": "05", "calories": "1500", "Expiring_Days": 12},
-        "Pepper": {"Product_Code": "06", "calories": "0250", "Expiring_Days": 5},
-        "Sausage": {"Product_Code": "07", "calories": "1800", "Expiring_Days": 8},
-        "Carrots": {"Product_Code": "08", "calories": "0300", "Expiring_Days": 14},
-        "Cucumber": {"Product_Code": "09", "calories": "0100", "Expiring_Days": 5},
-        "Chocolate": {"Product_Code": "10", "calories": "3000", "Expiring_Days": 30},
-        "Cake": {"Product_Code": "11", "calories": "2500", "Expiring_Days": 7},
-        "Butter": {"Product_Code": "12", "calories": "3500", "Expiring_Days": 14},
-        "Apple": {"Product_Code": "13", "calories": "0800", "Expiring_Days": 10},
-        "Strawberries": {"Product_Code": "14", "calories": "0200", "Expiring_Days": 5},
-        "Salad": {"Product_Code": "15", "calories": "0700", "Expiring_Days": 3},
+        # ... (your product details)
     }
 
     today = datetime.today()
 
     if article in product_details:
         product_info = product_details[article]
-        product_code = product_info["Product_Code"]  # Extract the product code
-        calories = product_info["calories"]          # Extract the calories information
-        # Calculate the expiration date based on the current date and the expiration days for the product
+        product_code = product_info["Product_Code"]
+        calories = product_info["calories"]
         expiring_date = (today + timedelta(days=product_info["Expiring_Days"])).strftime("%d%m%Y")
         owner_mapping = {"A": "01", "B": "02", "C": "03"}
-        # Get the owner number corresponding to the provided owner ('A', 'B', or 'C') or set a default value
-        owner_nr = owner_mapping.get(owner, "00")  # Default owner number if not 'A', 'B', or 'C'
+        owner_nr = owner_mapping.get(owner, "00")
 
-        # Generate the article code by concatenating different information elements
         article_code = str(product_code + expiring_date + calories + owner_nr)
-        return article_code  # Return the generated article code
+        return article_code
     else:
-        return "Product not found or not supported"  # Return a message if the article is not found in product_details
-    
-#Decode function to decode the product code
+        return "Product not found or not supported"
+
+# Function to decode the product code
 def decode_product_code(product_code):
-    product_number = product_code[:2]
-    expiration_date = product_code[2:10]
-    calories = product_code[10:14]
-    product_owner = product_code[14:]
-
-    product_number = int(product_number)
-    
-    expiration_date = (datetime.strptime(expiration_date,"%d%m%Y")).strftime("%d.%m.%Y")
-    calories = calories.lstrip("0")
-    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
-
-    return {
-        "Product Number": product_number,
-        "Expiration Date": expiration_date,
-        "Calories": calories,
-        "Product Owner": product_owner}
+    # ... (your decode function)
 
 # Function to add a product to the inventory list
-@st.cache(allow_output_mutation=True)
-def add_product(product_code):
-    st.session_state.inventory_list.append(product_code)
+    @st.cache(allow_output_mutation=True)
+    def add_product(product_code):
+        st.session_state.inventory_list.append(product_code)
 
 # Function to remove a product from the inventory list
-@st.cache(allow_output_mutation=True)
-def remove_product(product_code):
-    if product_code in st.session_state.inventory_list:
-        st.session_state.inventory_list.remove(product_code)
-
+    @st.cache(allow_output_mutation=True)
+    def remove_product(product_code):
+        if product_code in st.session_state.inventory_list:
+            st.session_state.inventory_list.remove(product_code)
 
 # Initialize session state to set buttons to a certain default state
 if "selected_options" not in st.session_state:
@@ -116,7 +82,7 @@ if "selected_options" not in st.session_state:
         "selected_button": None,
     }
 
-# Insert the name of the fridge (for example, your WG Name)
+# Insert the name of the fridge
 wg_name = st.text_input("Your WG name")
 
 # Display the title (name of the fridge) with a name given by a user input (style red)
@@ -140,21 +106,7 @@ if add_item_button:
 # Show select boxes and Confirm button if the "Add product" button is pressed
 if st.session_state.selected_options["selected_button"] == "add_item_button":
     options_Article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
+        # ... (your options)
     ]
     st.session_state.selected_options["Article"] = st.selectbox(
         "Choose your Article",
@@ -180,39 +132,22 @@ if confirm_button:
     add_product(product_code)
     st.write(f'You added the product with the following product code: {product_code}')
 
-
 # What happens if you press the remove_item_button
 remove_item_button = col2.button("Remove product")
 if remove_item_button:
     st.session_state.selected_options["selected_button"] = "remove_item_button"
 
-
 # Show select boxes if the "Remove product" button is pressed
 if st.session_state.selected_options["selected_button"] == "remove_item_button":
     remove_options_article = [
-        "Milk",
-        "Ham",
-        "Yogurt",
-        "Cheese",
-        "Cream",
-        "Pepper",
-        "Sausage",
-        "Carrots",
-        "Cucumber",
-        "Chocolate",
-        "Cake",
-        "Butter",
-        "Apple",
-        "Strawberries",
-        "Salad",
-    ]  # This needs to be a list with all Products inside the fridge
+        # ... (your remove options)
+    ]
     removed_options_article = st.selectbox(
         "Choose the articles you want to remove", remove_options_article
     )
     st.write("You removed", removed_options_article)
     removed_product_code = generate_product_code(removed_options_article, owner)
     remove_product(removed_product_code)
-
 
 # What happens if you press the add_owner_button
 add_owner_button = col3.button("Add owners")
@@ -281,4 +216,3 @@ if show_inventory_button:
         st.altair_chart(chart, use_container_width=True)
     else:
         st.warning("Inventory is empty. Add products to see the bar chart.")
-
