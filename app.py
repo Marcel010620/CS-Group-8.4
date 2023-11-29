@@ -212,7 +212,7 @@ if show_inventory_button:
         "Strawberries": {"Product_Code": "14", "calories": "0200", "Expiring_Days": 5},
         "Salad": {"Product_Code": "15", "calories": "0700", "Expiring_Days": 3},
     }
-    
+
     for product_code in st.session_state.inventory_list:
         decoded_info = decode_product_code(product_code, product_details)
         owner = decoded_info["Product Owner"]
@@ -339,41 +339,6 @@ elif selection_option == 'Expires soon':
     st.write(expiring_articles)
 
 
-# Initialize session state to store the decoded information dictionary
-if 'decoded_info_dict' not in st.session_state:
-    st.session_state.decoded_info_dict = {}
-
-
-def decode_product_code(product_code):
-    product_number = product_code[:2]
-    expiration_date = product_code[2:10]
-    calories = product_code[10:14]
-    product_owner = product_code[14:]
-
-    product_number = int(product_number)
-    
-    expiration_date = (datetime.strptime(expiration_date, "%d%m%Y")).strftime("%d.%m.%Y")
-    calories = calories.lstrip("0")
-    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
-
-    return {
-        "Product Number": product_number,
-        "Expiration Date": expiration_date,
-        "Calories": calories,
-        "Product Owner": product_owner
-    }
-
-# Apply decode_product_code to each element in inventory_list and append to the session state dictionary
-for product_code in st.session_state.inventory_list:
-    decoded_info = decode_product_code(product_code)
-    st.session_state.decoded_info_dict[product_code] = decoded_info
-
-# Display the decoded information stored in the session state dictionary
-for product_code, decoded_info in st.session_state.decoded_info_dict.items():
-    st.write(f"Product Code: {product_code}")
-    for key, value in decoded_info.items():
-        st.write(f"{key}: {value}")
-    st.write()
 
 
 
