@@ -195,19 +195,23 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
     owner_product_codes = defaultdict(lambda: defaultdict(list))
+    product_details = {
+        "Milk": {"Product_Code": "01", "calories": "0400", "Expiring_Days": 7},
+        # ... other product details
+    }
 
     for product_code in st.session_state.inventory_list:
-        decoded_info = decode_product_code(product_code)
+        decoded_info = decode_product_code(product_code, product_details)
         owner = decoded_info["Product Owner"]
-        product_number = decoded_info["Product Number"]
+        product_name = decoded_info["Product Name"]
         expiration_date = decoded_info["Expiration Date"]
-        owner_product_codes[owner][product_number].append((product_code, expiration_date))
+        owner_product_codes[owner][product_name].append((product_code, expiration_date))
 
-    for owner, product_codes in owner_product_codes.items():
+    for owner, product_names in owner_product_codes.items():
         st.write(f"Owner {owner} possesses the following products:")
-        for product_number, codes_and_dates in product_codes.items():
+        for product_name, codes_and_dates in product_names.items():
             for product_code, expiration_date in codes_and_dates:
-                st.write(f"Product {product_number}: Code - {product_code}, Expiration Date - {expiration_date}")
+                st.write(f"Product {product_name}: Code - {product_code}, Expiration Date - {expiration_date}")
         st.write()
 
 
