@@ -197,9 +197,22 @@ if show_inventory_button:
     owner_product_codes = defaultdict(lambda: defaultdict(list))
     product_details = {
         "Milk": {"Product_Code": "01", "calories": "0400", "Expiring_Days": 7},
-        # ... other product details
+        "Ham": {"Product_Code": "02", "calories": "0900", "Expiring_Days": 5},
+        "Yogurt": {"Product_Code": "03", "calories": "0350", "Expiring_Days": 10},
+        "Cheese": {"Product_Code": "04", "calories": "1200", "Expiring_Days": 15},
+        "Cream": {"Product_Code": "05", "calories": "1500", "Expiring_Days": 12},
+        "Pepper": {"Product_Code": "06", "calories": "0250", "Expiring_Days": 5},
+        "Sausage": {"Product_Code": "07", "calories": "1800", "Expiring_Days": 8},
+        "Carrots": {"Product_Code": "08", "calories": "0300", "Expiring_Days": 14},
+        "Cucumber": {"Product_Code": "09", "calories": "0100", "Expiring_Days": 5},
+        "Chocolate": {"Product_Code": "10", "calories": "3000", "Expiring_Days": 30},
+        "Cake": {"Product_Code": "11", "calories": "2500", "Expiring_Days": 7},
+        "Butter": {"Product_Code": "12", "calories": "3500", "Expiring_Days": 14},
+        "Apple": {"Product_Code": "13", "calories": "0800", "Expiring_Days": 10},
+        "Strawberries": {"Product_Code": "14", "calories": "0200", "Expiring_Days": 5},
+        "Salad": {"Product_Code": "15", "calories": "0700", "Expiring_Days": 3},
     }
-
+    
     for product_code in st.session_state.inventory_list:
         decoded_info = decode_product_code(product_code, product_details)
         owner = decoded_info["Product Owner"]
@@ -211,7 +224,7 @@ if show_inventory_button:
         st.write(f"Owner {owner} possesses the following products:")
         for product_name, codes_and_dates in product_names.items():
             for product_code, expiration_date in codes_and_dates:
-                st.write(f"Product {product_name}: Code - {product_code}, Expiration Date - {expiration_date}")
+                st.write(f"Product {product_name}, Expiration Date - {expiration_date}")
         st.write()
 
 
