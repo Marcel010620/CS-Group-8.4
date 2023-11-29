@@ -64,20 +64,25 @@ def remove_item(selected_article):
         st.write(f'The product with the product code {selected_article} has been removed from the inventory.')
 
 # Decode function to decode the product code
-def decode_product_code(product_code):
+def decode_product_code(product_code, product_details):
     product_number = product_code[:2]
     expiration_date = product_code[2:10]
     calories = product_code[10:14]
     product_owner = product_code[14:]
 
-    product_number = int(product_number)
-    
+    # Use the product name from the product_details dictionary based on the product code
+    product_name = None
+    for name, details in product_details.items():
+        if details["Product_Code"] == product_number:
+            product_name = name
+            break
+
     expiration_date = (datetime.strptime(expiration_date, "%d%m%Y")).strftime("%d.%m.%Y")
     calories = calories.lstrip("0")
     product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
 
     return {
-        "Product Number": product_number,
+        "Product Name": product_name,
         "Expiration Date": expiration_date,
         "Calories": calories,
         "Product Owner": product_owner
