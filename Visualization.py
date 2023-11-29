@@ -260,25 +260,29 @@ if show_inventory_button:
     # Create a DataFrame for Altair
     chart_df = inventory_df.groupby('Article').size().reset_index(name='Count')
 
-    try:
-        # Create a bar chart with Altair
-        chart = alt.Chart(chart_df).mark_bar().encode(
-            x=alt.X('Article:O', title='Article'),
-            y=alt.Y('Count:Q', title='Count'),
-            color=alt.value('blue')
-        )
+    # Check if the DataFrame is not empty
+    if not chart_df.empty:
+        try:
+            # Create a bar chart with Altair
+            chart = alt.Chart(chart_df).mark_bar().encode(
+                x=alt.X('Article:O', title='Article'),
+                y=alt.Y('Count:Q', title='Count'),
+                color=alt.value('blue')
+            )
 
-        # Set chart properties
-        chart = chart.properties(
-            width=400,
-            title=f'Bar Chart - Quantity by Article'
-        )
+            # Set chart properties
+            chart = chart.properties(
+                width=400,
+                title=f'Bar Chart - Quantity by Article'
+            )
 
-        # Display the bar chart using Streamlit
-        st.altair_chart(chart, use_container_width=True)
+            # Display the bar chart using Streamlit
+            st.altair_chart(chart, use_container_width=True)
 
-    except KeyError as e:
-        st.error(f"An error occurred: {e}")
+        except KeyError as e:
+            st.error(f"An error occurred: {e}")
+    else:
+        st.warning("Inventory is empty. Add products to see the bar chart.")
 
 
 import streamlit as st
