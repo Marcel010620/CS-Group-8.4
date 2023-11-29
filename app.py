@@ -8,8 +8,6 @@ from collections import defaultdict
 if "inventory_list" not in st.session_state:
     st.session_state.inventory_list = []
 
-# Read the Product file
-df = pd.read_csv('products.csv')
 
 #initialize classes & sublcasses 
 class Product:
@@ -386,7 +384,7 @@ def decode_product_code(product_code):
     }
 
 # Apply decode_product_code to each element in inventory_list and append to the session state dictionary
-for product_code in inventory_list:
+for product_code in st.session_state.inventory_list:
     decoded_info = decode_product_code(product_code)
     st.session_state.decoded_info_dict[product_code] = decoded_info
 
