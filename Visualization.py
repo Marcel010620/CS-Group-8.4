@@ -241,6 +241,8 @@ if st.session_state.selected_options["selected_button"] == "remove_owner_button"
         st.session_state.selected_options["Owner"] = None
         st.write("Removed owner:", removed_owner)
 
+# ...
+
 # Show Inventory button
 show_inventory_button = st.button("Show Inventory")
 if show_inventory_button:
@@ -260,9 +262,12 @@ if show_inventory_button:
     # Create a DataFrame for Altair
     chart_df = inventory_df.groupby('Article').size().reset_index(name='Count')
 
-    # Check if the DataFrame is not empty
-    if not chart_df.empty:
-        try:
+    # Clear the cache for the chart to ensure it's updated
+    st.cache(hash_funcs={pd.DataFrame: lambda _: None})(chart_df)
+
+    try:
+        # Check if the DataFrame is not empty
+        if not chart_df.empty:
             # Create a bar chart with Altair
             chart = alt.Chart(chart_df).mark_bar().encode(
                 x=alt.X('Article:O', title='Article'),
@@ -279,9 +284,9 @@ if show_inventory_button:
             # Display the bar chart using Streamlit
             st.altair_chart(chart, use_container_width=True)
 
-        except KeyError as e:
-            st.error(f"An error occurred: {e}")
-    else:
-        st.warning("Inventory is empty. Add products to see the bar chart.")
+        else:
+            st.warning("Inventory is empty. Add products to see the bar chart.")
 
+    except KeyError as e:
+        st.error(f"An error occurred: {e}")
 
