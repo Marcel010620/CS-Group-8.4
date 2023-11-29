@@ -224,7 +224,7 @@ if show_inventory_button:
         st.write(f"Owner {owner} possesses the following products:")
         for product_name, codes_and_dates in product_names.items():
             for product_code, expiration_date in codes_and_dates:
-                st.write(f"Product {product_name}, Expiration Date - {expiration_date}")
+                st.write(f"{product_name}, Expiration Date - {expiration_date}")
         st.write()
 
 
