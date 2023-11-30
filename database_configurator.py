@@ -1,56 +1,13 @@
-import sqlite3
-from datetime import date
-import pandas as pd
+# example/st_app.py
+!pip install st-gsheets-connection
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+url = "https://docs.google.com/spreadsheets/d/1JDy9md2VZPz4JbYtRPJLs81_3jUK47nx6GYQjgU8qNY/edit?usp=sharing"
 
-# Connect to SQLite database (create one if it doesn't exist)
-conn = sqlite3.connect('refrigerator.sql')
+conn = st.experimental_connection("gsheets", type=GSheetsConnection)
 
-# Create a table (if it doesn't exist)
-cursor = conn.cursor()
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS refrigerator_contents(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    product_name TEXT,
-    expiring_date DATE,
-    owner TEXT,
-    calories INTEGER,
-    protein INTEGER,
-    fat INTEGER,
-    carbohydrates INTEGER
-    )
-    ''')
-
-# Commit the changes and close the connection
-conn.commit()
-conn.close()
-
-def add_item(product_name, expiring_date, owner, calories, protein, fat, carbohydrates):
-    # Connect to SQLite database
-    conn = sqlite3.connect('refrigerator.db')
-    cursor = conn.cursor()
-
-    # Insert the item into the table
-    cursor.execute('''
-        INSERT INTO refrigerator_contents (product_name, expiring_date, owner, calories, protein, fat, carbohydrates)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', (product_name, expiring_date, owner, calories, protein, fat, carbohydrates))
-
-    # Commit the changes and close the connection
-    conn.commit()
-    conn.close()
+data = conn.read(spreadsheet=url, usecols=[0, 1])
+st.dataframe(data)
 
 
-def display_contents():
-    # Connect to SQLite database
-    conn = sqlite3.connect('refrigerator.db')
 
-    # Query the database to get all items in the refrigerator
-    query = "SELECT * FROM refrigerator_contents"
-    df = pd.read_sql_query(query, conn)
-
-    # Close the connection
-    conn.close()
-
-    return df
-
-print(display_contents())
