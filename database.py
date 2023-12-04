@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
+import os
 
 # Google Sheets Authentifizierungs-Scope
 SCOPES = [
@@ -9,8 +10,8 @@ SCOPES = [
     'https://www.googleapis.com/auth/drive'
 ]
 
-# Pfad zu deiner JSON-Anmeldedatei
-SERVICE_ACCOUNT_FILE = '/Users/Anina/Desktop/CS/Project/Anina/CS-Project-main/projekt-cs-32b2fba1e1ff.json'
+# Pfad zur JSON-Anmeldedatei im Root-Verzeichnis
+SERVICE_ACCOUNT_FILE = 'projekt-cs-32b2fba1e1ff.json'
 
 # Deine Spreadsheet-ID aus der URL deines Google Sheets
 SPREADSHEET_ID = '1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4'
