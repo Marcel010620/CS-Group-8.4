@@ -1,7 +1,15 @@
 import streamlit as st
 import pandas as pd
 import gspread
-from google.oauth2.service_account import Credentials
+from google.oauth2.service_account  import Credentials
+
+import subprocess
+
+# Install required packages
+subprocess.check_call(["pip", "install", "google-auth"])
+subprocess.check_call(["pip", "install", "google-auth-oauthlib"])
+subprocess.check_call(["pip", "install", "google-auth-httplib2"])
+
 
 # Google Sheets Authentifizierungs-Scope
 SCOPES = [
