@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from google.oauth2.service_account import Credentials
+from google.oauth2.service_account import credentials
 
 
 # Google Sheets Authentifizierungs-Scope
