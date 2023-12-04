@@ -1,5 +1,0 @@
-pip install gspread 
-pip install pandas
-pip install google-auth
-pip install google-auth-oauthlib
-pip install google-auth-httplib2
