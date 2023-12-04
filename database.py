@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from google.oauth2.service_account import credentials
-
+import gspread
+from google.oauth2.service_account import Credentials
 
 # Google Sheets Authentifizierungs-Scope
 SCOPES = [
@@ -23,6 +23,10 @@ credentials_info = {
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cs-projekt%40projekt-cs.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
 }
+
+# Deine Spreadsheet-ID aus der URL deines Google Sheets
+SPREADSHEET_ID = '1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4'
+
 
 def authenticate_gspread():
     credentials = Credentials.from_service_account_info(credentials_info, scopes=SCOPES)
