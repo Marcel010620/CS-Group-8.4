@@ -249,10 +249,10 @@ if show_inventory_button:
         st.write()
 
 
-from datetime import datetime, timedelta
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import altair as alt
+from datetime import datetime, timedelta
 import random
 
 # Sample data for different selections from the second code
@@ -286,7 +286,7 @@ expanded_df = df.explode('Owner')
 st.title('Fridge Overview')
 
 # Create a dropdown to select an option
-selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article', 'Expiration'])
 
 # Create a DataFrame for Altair
 if selected_option == 'Owner':
@@ -296,6 +296,13 @@ if selected_option == 'Owner':
 elif selected_option == 'Article':
     chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
     x_title, y_title = 'Article', 'Count'
+
+elif selected_option == 'Expiration':
+    today = datetime.now()
+    expiration_dates = [today + timedelta(days=i) for i in range(5)]
+    df['Expiration Date'] = [random.choice(expiration_dates) for _ in range(len(df))]
+    chart_df = df.groupby('Expiration Date').size().reset_index(name='Count')
+    x_title, y_title = 'Expiration Date', 'Count'
 
 # Create a bar chart with Altair
 chart = alt.Chart(chart_df).mark_bar().encode(
