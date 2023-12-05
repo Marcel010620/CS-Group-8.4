@@ -5,11 +5,19 @@ from datetime import datetime, timedelta
 import random
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import os
+from google.oauth2 import service_account
+
+# Get the absolute path to the directory containing your script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Path to the JSON file
+json_path = os.path.join(script_dir, "projekt-cs-32b2fba1e1ff.json")
 
 # Connect to Google Sheets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("projekt-cs-32b2fba1e1ff.json", scope)
-client = gspread.authorize(creds)
+creds = service_account.Credentials.from_service_account_file(json_path, scopes=scope)
+
 
 # Open the Google Sheets file by URL
 spreadsheet_url = "https://docs.google.com/spreadsheets/d/1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4/edit#gid=0"
