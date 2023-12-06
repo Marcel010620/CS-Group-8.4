@@ -2,21 +2,21 @@ from datetime import datetime, timedelta
 
 def generate_product_code(article, owner):
     product_details = {
-        "Milk": {"Product_Code": "02", "calories": "0400", "Expiring_Days": 7},
-        "Ham": {"Product_Code": "05", "calories": "0900", "Expiring_Days": 5},
-        "Yogurt": {"Product_Code": "08", "calories": "0350", "Expiring_Days": 10},
-        "Cheese": {"Product_Code": "11", "calories": "1200", "Expiring_Days": 15},
-        "Cream": {"Product_Code": "14", "calories": "1500", "Expiring_Days": 12},
-        "Peppers": {"Product_Code": "17", "calories": "0250", "Expiring_Days": 5},
-        "Sausage": {"Product_Code": "20", "calories": "1800", "Expiring_Days": 8},
-        "Carrots": {"Product_Code": "23", "calories": "0300", "Expiring_Days": 14},
-        "Cucumber": {"Product_Code": "26", "calories": "0100", "Expiring_Days": 5},
-        "Chocolate": {"Product_Code": "29", "calories": "3000", "Expiring_Days": 30},
-        "Cake": {"Product_Code": "32", "calories": "2500", "Expiring_Days": 7},
-        "Butter": {"Product_Code": "35", "calories": "3500", "Expiring_Days": 14},
-        "Apple": {"Product_Code": "38", "calories": "0800", "Expiring_Days": 10},
-        "Strawberries": {"Product_Code": "41", "calories": "0200", "Expiring_Days": 5},
-        "Salad": {"Product_Code": "44", "calories": "0700", "Expiring_Days": 3},
+        "Milk": {"Product_Code": "01", "calories": "0400", "Expiring_Days": 7},
+        "Ham": {"Product_Code": "02", "calories": "0500", "Expiring_Days": 5},
+        "Yogurt": {"Product_Code": "03", "calories": "0200", "Expiring_Days": 10},
+        "Cheese": {"Product_Code": "04", "calories": "1000", "Expiring_Days": 15},
+        "Cream": {"Product_Code": "05", "calories": "1500", "Expiring_Days": 12},
+        "Peppers": {"Product_Code": "06", "calories": "0050", "Expiring_Days": 5},
+        "Sausage": {"Product_Code": "07", "calories": "0500", "Expiring_Days": 8},
+        "Carrots": {"Product_Code": "08", "calories": "0030", "Expiring_Days": 14},
+        "Cucumber": {"Product_Code": "09", "calories": "0050", "Expiring_Days": 5},
+        "Chocolate": {"Product_Code": "10", "calories": "0600", "Expiring_Days": 30},
+        "Cake": {"Product_Code": "11", "calories": "0800", "Expiring_Days": 7},
+        "Butter": {"Product_Code": "12", "calories": "1000", "Expiring_Days": 14},
+        "Apple": {"Product_Code": "13", "calories": "0080", "Expiring_Days": 10},
+        "Strawberries": {"Product_Code": "14", "calories": "0050", "Expiring_Days": 5},
+        "Salad": {"Product_Code": "15", "calories": "0020", "Expiring_Days": 3},
     }
 
    
