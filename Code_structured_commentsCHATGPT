@@ -1,0 +1,41 @@
+Duplicate Function Names:
+
+There are two identical functions named authenticate_gspread(). You can remove one of them to avoid redundancy.
+Unused Libraries:
+
+The script imports the pandas library twice. You can remove the redundant import statement.
+Unused Variables:
+
+The variable gc is initialized using gc = authenticate_gspread(), but it's not used afterward. It seems like a redundant line and can be removed.
+Global Constants:
+
+Consider converting global constants like SCOPES, SERVICE_ACCOUNT_FILE, SPREADSHEET_ID, OWNER_SHEET_NAME, and INVENTORY_SHEET_NAME to uppercase to indicate that they are constants.
+Code Organization:
+
+It's good practice to organize your code into functions or classes to improve readability and maintainability.
+Hardcoded File Path:
+
+The service account file path (SERVICE_ACCOUNT_FILE) is hardcoded. It might be a good idea to make it configurable, especially if you plan to share the script or use it in different environments.
+Error Handling:
+
+Consider adding error handling mechanisms, especially around Google Sheets API interactions, to handle potential issues gracefully.
+Session State Usage:
+
+The use of st.session_state is well done for maintaining state across different user interactions. It's a good approach for handling the state of your Streamlit app.
+Altair Chart Library:
+
+The altair library is imported, but it seems like there's no code that uses it. If you don't plan to use it, you can remove the import statement.
+Button Actions:
+
+The logic for button actions is well-structured using session state. It's clear and easy to follow.
+Random Item ID:
+The use of random.randint(0, 999) to generate item IDs might lead to collisions. You might want to consider a more robust method to generate unique IDs.
+HTML Unsafe Allow:
+
+Be cautious when using unsafe_allow_html=True with Streamlit, as it can pose security risks. Ensure that the HTML you allow is safe and properly sanitized.
+Code Comments:
+
+Consider adding more comments to explain complex logic or functions, especially for parts that might not be immediately clear to someone reading the code.
+
+Consistency in Naming:
+Check for consistency in variable naming conventions. For example, you have a variable named item_data, and in other places, you use inventory_data.
