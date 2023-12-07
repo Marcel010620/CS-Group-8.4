@@ -105,3 +105,8 @@ if show_inventory_button:
 # Clear the displayed inventory if the Hide Inventory button is pressed
 if hide_inventory_button:
     st.text("")  # You can use other methods to clear or hide the inventory display
+
+
+
+# This refactoring introduces separate functions for common tasks, making the code more modular and readable.
+It maintains the existing functionality while improving code organization.
