@@ -55,7 +55,21 @@ def add_item_to_inventory(product_name, selected_owner_surname, entry_date_str):
     gc = authenticate_gspread()
 
     product_details = {
-        # ... (same as in your code)
+    "Milk": {"Name": "Milk", "calories": "400", "Expiring_Days": 7},
+    "Ham": {"Name": "Ham", "calories": "900", "Expiring_Days": 5},
+    "Yogurt": {"Name": "Yogurt", "calories": "350", "Expiring_Days": 10},
+    "Cheese": {"Name": "Cheese", "calories": "1200", "Expiring_Days": 15},
+    "Cream": {"Name": "Cream", "calories": "1500", "Expiring_Days": 12},
+    "Pepper": {"Name": "Pepper", "calories": "250", "Expiring_Days": 5},
+    "Sausage": {"Name": "Sausage", "calories": "1800", "Expiring_Days": 8},
+    "Carrots": {"Name": "Carrots", "calories": "300", "Expiring_Days": 14},
+    "Cucumber": {"Name": "Cucumber", "calories": "100", "Expiring_Days": 5},
+    "Chocolate": {"Name": "Chocolate", "calories": "3000", "Expiring_Days": 30},
+    "Cake": {"Name": "Cake", "calories": "2500", "Expiring_Days": 7},
+    "Butter": {"Name": "Butter", "calories": "3500", "Expiring_Days": 14},
+    "Apple": {"Name": "Apple", "calories": "800", "Expiring_Days": 10},
+    "Strawberries": {"Name": "Strawberries", "calories": "200", "Expiring_Days": 5},
+    "Salad": {"Name": "Salad", "calories": "700", "Expiring_Days": 3}, 
     }
 
     if product_name in product_details:
