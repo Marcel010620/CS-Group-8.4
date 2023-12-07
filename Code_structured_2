@@ -1,0 +1,107 @@
+import streamlit as st
+import pandas as pd
+import gspread
+from google.oauth2.service_account import Credentials
+from datetime import datetime, timedelta
+import altair as alt
+import random
+
+# Constants
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+]
+SERVICE_ACCOUNT_FILE = '/Users/ericbangerter/Documents/Universität/5.Semester/CS/Group_project/Final/projekt-cs-32b2fba1e1ff.json'
+SPREADSHEET_ID = '1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4'
+OWNER_SHEET_NAME = 'Owner_Register'
+INVENTORY_SHEET_NAME = 'Fridge_Inventory'
+
+# Function to authenticate and get Google Sheets client
+def authenticate_gspread():
+    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    gc = gspread.authorize(credentials)
+    return gc
+
+# Function to load data from Google Sheets
+def load_data_from_sheet(sheet_name):
+    gc = authenticate_gspread()
+    worksheet = gc.open_by_key(SPREADSHEET_ID).worksheet(sheet_name)
+    values = worksheet.get_all_values()
+
+    if values:
+        data = pd.DataFrame(values[1:], columns=values[0])
+    else:
+        data = pd.DataFrame()
+
+    return data
+
+# Function to write data to Google Sheets (Owner Register or Fridge Inventory)
+def write_to_google_sheets(sheet_name, data):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    worksheet.append_row(data)
+
+# Function to remove row from Google Sheets (Owner Register or Fridge Inventory)
+def remove_row(sheet_name, index):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    index_list = index.tolist()
+    worksheet.delete_rows(*[i + 2 for i in index_list])  # Adding 2 due to 1-indexed Google Sheets
+
+# Function to add an owner to Google Sheets
+def add_owner(surname, last_name, date_of_birth, diet):
+    data_to_store = [surname, last_name, date_of_birth, diet]
+    write_to_google_sheets(OWNER_SHEET_NAME, data_to_store)
+
+# Function to add an item to Google Sheets
+def add_item(product_name, owner, entry_date_str):
+    product_info = product_details.get(product_name)
+    if product_info:
+        expiring_days = int(product_info["Expiring_Days"])
+        calories = product_info["calories"]
+        entry_date = datetime.strptime(entry_date_str, "%d.%m.%Y").date()
+        item_id = random.randint(0, 999)
+        data_to_store = [item_id, product_name, entry_date, expiring_days, owner, calories]
+        write_to_google_sheets(INVENTORY_SHEET_NAME, data_to_store)
+    else:
+        st.error("Invalid product selected. Please choose a valid product.")
+
+# Main Streamlit app
+wg_name = st.text_input("Your WG name")
+st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
+
+# Buttons and actions
+add_item_button = st.button("Add product")
+remove_item_button = st.button("Remove Item")
+add_owner_button = st.button("Add new Owner")
+remove_owner_button = st.button("Remove Owner")
+show_inventory_button = st.button("Show Inventory")
+hide_inventory_button = st.button("Hide Inventory")
+
+# ... (your existing button logic)
+
+# Handle adding an item
+if add_item_button:
+    product_name = st.selectbox("Choose your Article", list(product_details.keys()), key="Options_article")
+    owners_data = load_data_from_sheet(OWNER_SHEET_NAME)
+    owners_surnames = owners_data["Surname"].tolist()
+    selected_owner_surname_item = st.selectbox("Select Owner", owners_surnames, key="Options_owner")
+    date_str = st.text_input("Enter Date of Entry (Format: DD.MM.YYYY)", key="date_text_input")
+    confirm_add_item_button = st.button("Confirm item_add")
+    if confirm_add_item_button:
+        add_item(product_name, selected_owner_surname_item, date_str)
+        st.success("Item successfully added.")
+
+# ... (your existing logic for other actions)
+
+# Display the inventory if the Show Inventory button is pressed
+if show_inventory_button:
+    inventory_data = load_data_from_sheet(INVENTORY_SHEET_NAME)
+    st.write("## Inventory Data")
+    st.table(inventory_data)
+
+# Clear the displayed inventory if the Hide Inventory button is pressed
+if hide_inventory_button:
+    st.text("")  # You can use other methods to clear or hide the inventory display
