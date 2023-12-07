@@ -1,0 +1,141 @@
+import streamlit as st
+import pandas as pd
+import gspread
+from google.oauth2.service_account import Credentials
+import altair as alt
+from datetime import datetime, timedelta
+from collections import defaultdict
+import random
+
+# Google Sheets Authentication Scope
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+]
+
+# Path to the JSON Authentication file
+SERVICE_ACCOUNT_FILE = '/Users/ericbangerter/Documents/Universität/5.Semester/CS/Group_project/Final/projekt-cs-32b2fba1e1ff.json'
+
+# Spreadsheet ID from the Google Sheets URL
+SPREADSHEET_ID = '1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4'
+
+# Names of the sheets in the Google Sheets file
+OWNER_SHEET_NAME = 'Owner_Register'
+INVENTORY_SHEET_NAME = 'Fridge_Inventory'
+
+def authenticate_gspread():
+    credentials = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    gc = gspread.authorize(credentials)
+    return gc
+
+def load_data_from_sheet(gc, sheet_name):
+    worksheet = gc.open_by_key(SPREADSHEET_ID).worksheet(sheet_name)
+    values = worksheet.get_all_values()
+
+    if values:
+        data = pd.DataFrame(values[1:], columns=values[0])
+    else:
+        data = pd.DataFrame()
+
+    return data
+
+def write_to_google_sheets(sheet_name, data):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    worksheet.append_row(data)
+
+def remove_row(sheet_name, item_index):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    item_index_list = item_index.tolist()
+    worksheet.delete_rows(*[index + 2 for index in item_index_list])
+
+def add_owner(surname, last_name, date_of_birth, diet):
+    data_to_store = [surname, last_name, date_of_birth, diet]
+    write_to_google_sheets(OWNER_SHEET_NAME, data_to_store)
+
+def remove_owner(owner_index):
+    remove_row(OWNER_SHEET_NAME, owner_index)
+
+def add_item(product_name, owner, entry_date_str):
+    product_info = product_details.get(product_name)
+    if product_info:
+        product_name = product_info["Name"]
+        calories = product_info["calories"]
+        expiring_days = int(product_info["Expiring_Days"])
+        entry_date = datetime.strptime(entry_date_str, "%d.%m.%Y").date()
+        item_id = random.randint(0, 999)
+        data_to_store = [item_id, product_name, entry_date, expiring_days, owner, calories]
+        write_to_google_sheets(INVENTORY_SHEET_NAME, data_to_store)
+
+def remove_item(selected_item_product_name):
+    item_data = load_data_from_sheet(authenticate_gspread(), INVENTORY_SHEET_NAME)
+    item_index = item_data[item_data["Product name"] == selected_item_product_name].index
+    remove_row(INVENTORY_SHEET_NAME, item_index)
+
+def show_inventory():
+    inventory_data = load_data_from_sheet(authenticate_gspread(), INVENTORY_SHEET_NAME)
+    st.write("## Inventory Data")
+    st.table(inventory_data)
+
+def hide_inventory():
+    st.text("")  # Clear the displayed inventory
+
+# Product details dictionary with codes, calories, and expiration days
+product_details = {
+    "Milk": {"Name": "Milk", "calories": "400", "Expiring_Days": 7},
+    "Ham": {"Name": "Ham", "calories": "900", "Expiring_Days": 5},
+    "Yogurt": {"Name": "Yogurt", "calories": "350", "Expiring_Days": 10},
+    "Cheese": {"Name": "Cheese", "calories": "1200", "Expiring_Days": 15},
+    "Cream": {"Name": "Cream", "calories": "1500", "Expiring_Days": 12},
+    "Pepper": {"Name": "Pepper", "calories": "250", "Expiring_Days": 5},
+    "Sausage": {"Name": "Sausage", "calories": "1800", "Expiring_Days": 8},
+    "Carrots": {"Name": "Carrots", "calories": "300", "Expiring_Days": 14},
+    "Cucumber": {"Name": "Cucumber", "calories": "100", "Expiring_Days": 5},
+    "Chocolate": {"Name": "Chocolate", "calories": "3000", "Expiring_Days": 30},
+    "Cake": {"Name": "Cake", "calories": "2500", "Expiring_Days": 7},
+    "Butter": {"Name": "Butter", "calories": "3500", "Expiring_Days": 14},
+    "Apple": {"Name": "Apple", "calories": "800", "Expiring_Days": 10},
+    "Strawberries": {"Name": "Strawberries", "calories": "200", "Expiring_Days": 5},
+    "Salad": {"Name": "Salad", "calories": "700", "Expiring_Days": 3}, 
+}
+
+# Streamlit application code
+wg_name = st.text_input("Your WG name")
+st.markdown(f"# This is the smart refrigerator of: <span style='color:red;'>{wg_name}</span>", unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns(4)
+
+add_item_button = col1.button("Add product")
+remove_item_button = col2.button("Remove Item")
+add_owner_button = col3.button("Add new Owner")
+remove_owner_button = col4.button("Remove Owner")
+
+# Add, Remove, or Display Inventory based on button clicks
+if add_item_button:
+    # Implement code for adding items
+    pass
+
+if remove_item_button:
+    # Implement code for removing items
+    pass
+
+if add_owner_button:
+    # Implement code for adding owners
+    pass
+
+if remove_owner_button:
+    # Implement code for removing owners
+    pass
+
+# Display or hide inventory based on button clicks
+show_inventory_button = col1.button("Show Inventory")
+hide_inventory_button = col2.button("Hide Inventory")
+
+if show_inventory_button:
+    show_inventory()
+
+if hide_inventory_button:
+    hide_inventory()
