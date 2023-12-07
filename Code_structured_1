@@ -1,0 +1,101 @@
+import streamlit as st
+import pandas as pd
+import gspread
+from google.oauth2.service_account import Credentials
+from datetime import datetime, timedelta
+import altair as alt
+import random
+
+# Global constants
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+]
+SERVICE_ACCOUNT_FILE = '/Users/ericbangerter/Documents/Universität/5.Semester/CS/Group_project/Final/projekt-cs-32b2fba1e1ff.json'
+SPREADSHEET_ID = '1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4'
+OWNER_SHEET_NAME = 'Owner_Register'
+INVENTORY_SHEET_NAME = 'Fridge_Inventory'
+
+# Authenticate Google Sheets
+def authenticate_gspread():
+    credentials = Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    gc = gspread.authorize(credentials)
+    return gc
+
+# Load data from Google Sheets
+def load_data_from_sheet(gc, sheet_name):
+    worksheet = gc.open_by_key(SPREADSHEET_ID).worksheet(sheet_name)
+    values = worksheet.get_all_values()
+
+    if values:
+        data = pd.DataFrame(values[1:], columns=values[0])
+    else:
+        data = pd.DataFrame()
+
+    return data
+
+# Write data to Google Sheets (Owner Register or Fridge Inventory)
+def write_to_google_sheets(sheet_name, data):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    worksheet.append_row(data)
+
+# Remove row from Google Sheets (Owner Register or Fridge Inventory)
+def remove_row(sheet_name, index):
+    gc = authenticate_gspread()
+    document = gc.open_by_key(SPREADSHEET_ID)
+    worksheet = document.worksheet(sheet_name)
+    index_list = index.tolist()
+    worksheet.delete_rows(*[i + 2 for i in index_list])  # Adding 2 for indexing difference
+
+# Add item to Fridge Inventory
+def add_item_to_inventory(product_name, selected_owner_surname, entry_date_str):
+    gc = authenticate_gspread()
+
+    product_details = {
+        # ... (same as in your code)
+    }
+
+    if product_name in product_details:
+        product_info = product_details[product_name]
+        expiring_days = int(product_info["Expiring_Days"])
+        owner = selected_owner_surname
+        entry_date = datetime.strptime(entry_date_str, "%d.%m.%Y").date()
+        item_id = random.randint(0, 999)
+        calories = product_info["calories"]
+
+        data_to_store = [item_id, product_name, entry_date, expiring_days, owner, calories]
+
+        write_to_google_sheets(INVENTORY_SHEET_NAME, data_to_store)
+        st.success("Item successfully added.")
+    else:
+        st.error("Invalid product selected. Please choose a valid product.")
+
+# Remove item from Fridge Inventory
+def remove_item_from_inventory(selected_item_product_name):
+    item_data = load_data_from_sheet(gc, INVENTORY_SHEET_NAME)
+    item_index = item_data[item_data["Product name"] == selected_item_product_name].index
+    remove_row(INVENTORY_SHEET_NAME, item_index)
+    st.success("Item successfully removed.")
+
+# Add owner to Owner Register
+def add_owner_to_register(surname, last_name, date_of_birth, diet):
+    data_to_store = [surname, last_name, date_of_birth, diet]
+    write_to_google_sheets(OWNER_SHEET_NAME, data_to_store)
+    st.success("Owner successfully added.")
+
+# Remove owner from Owner Register
+def remove_owner_from_register(selected_owner_surname):
+    owners_data = load_data_from_sheet(gc, OWNER_SHEET_NAME)
+    owner_index = owners_data[owners_data["Surname"] == selected_owner_surname].index
+    remove_row(OWNER_SHEET_NAME, owner_index)
+    st.success("Owner successfully removed.")
+
+# Streamlit UI
+def main():
+    # ... (your existing Streamlit code)
+
+if __name__ == "__main__":
+    main()
