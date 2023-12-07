@@ -139,3 +139,7 @@ if show_inventory_button:
 
 if hide_inventory_button:
     hide_inventory()
+
+# This refactoring separates the core functionalities into functions, making the code more modular and easier to understand.
+Adjustments have been made to variable names and comments for improved clarity.
+
