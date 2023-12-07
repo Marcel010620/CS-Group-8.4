@@ -324,14 +324,14 @@ st.altair_chart(chart, use_container_width=True)
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
+from collections import defaultdict
 
-# Sample data
+# Sample data for different selections
 data = {
-    'Article': ['Apple', 'Apple', 'Cherry', 'Tomato', 'Elderberry'],
-    'Quantity': [10, 5, 7, 3, 2],
-    'Category': ['Fruit', 'Fruit', 'Fruit', 'Fruit', 'Fruit'],
-    'Owner': ['A', 'A', 'C', 'A', 'B'],
-    'Expiration Date': [datetime(2023, 12, 1), datetime(2023, 12, 3), datetime(2023, 12, 5), datetime(2023, 11, 25), datetime(2023, 12, 7)],
+    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
+    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
+    'Owner': ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C'],
+    'Expiration Date': ['20230101', '20230201', '20230301', '20230401', '20230501', '20230601', '20230701', '20230801', '20230901', '20231001', '20231101', '20231201', '20240101', '20240201', '20240301'],
 }
 
 df = pd.DataFrame(data)
@@ -339,88 +339,29 @@ df = pd.DataFrame(data)
 # Create a Streamlit app
 st.title('Ownership')
 
-# Create a dropdown to select either "Owner" or "Expires soon"
-selection_option = st.selectbox('Select an option:', ['Owner', 'Expires soon'])
+# Select an owner from the dropdown
+owners_list = df['Owner'].unique()
+selected_owner = st.selectbox('Select an owner:', owners_list)
+st.write(f'Selected owner: {selected_owner}')
 
-# Display the selected option
-st.write(f'Selected option: {selection_option}')
+# Filter and calculate total count of products belonging to the selected owner
+owner_products = df[df['Owner'] == selected_owner]
+total_count_dict = owner_products.groupby('Article')['Quantity'].sum().to_dict()
 
-# Based on the selected option, create and display the corresponding list
-if selection_option == 'Owner':
-    owners_list = df['Owner'].unique()
-    selected_owner = st.selectbox('Select an owner:', owners_list)
-    st.write(f'Selected owner: {selected_owner}')
+st.write(f'Total count of products owned by {selected_owner}:')
+
+for article, total_count in total_count_dict.items():
+    st.write(f'{article}: {total_count}')
+
+
+# Create a Streamlit app
+st.title('Expires soon')
     
-    # Filter and calculate total count of products belonging to the selected owner
-    owner_products = df[df['Owner'] == selected_owner]
-    total_count_dict = owner_products.groupby('Article')['Quantity'].sum().to_dict()
+expiration_threshold = datetime.now() + timedelta(days=5)
+expiring_articles = df[df['Expiration Date'] <= expiration_threshold]
     
-    st.write(f'Total count of products owned by {selected_owner}:')
-    
-    for article, total_count in total_count_dict.items():
-        st.write(f'{article}: {total_count}')
-
-elif selection_option == 'Expires soon':
-    expiration_threshold = datetime.now() + timedelta(days=2)
-    expiring_articles = df[df['Expiration Date'] <= expiration_threshold]['Article'].tolist()
-    st.write("Articles that expire soon:")
-    st.write(expiring_articles)
+# Create a table with articles expiring soon
+st.table(expiring_articles[['Article', 'Expiration Date']])
 
 
-# Initialize session state to store the decoded information dictionary
-if 'decoded_info_dict' not in st.session_state:
-    st.session_state.decoded_info_dict = {}
-
-
-def decode_product_code(product_code):
-    product_number = product_code[:2]
-    expiration_date = product_code[2:10]
-    calories = product_code[10:14]
-    product_owner = product_code[14:]
-
-    product_number = int(product_number)
-    
-    expiration_date = (datetime.strptime(expiration_date, "%d%m%Y")).strftime("%d.%m.%Y")
-    calories = calories.lstrip("0")
-    product_owner = "A" if product_owner == "01" else "B" if product_owner == "02" else "C" if product_owner == "03" else "No Owner"
-
-    return {
-        "Product Number": product_number,
-        "Expiration Date": expiration_date,
-        "Calories": calories,
-        "Product Owner": product_owner
-    }
-
-# Apply decode_product_code to each element in inventory_list and append to the session state dictionary
-for product_code in st.session_state.inventory_list:
-    decoded_info = decode_product_code(product_code)
-    st.session_state.decoded_info_dict[product_code] = decoded_info
-
-# Display the decoded information stored in the session state dictionary
-for product_code, decoded_info in st.session_state.decoded_info_dict.items():
-    st.write(f"Product Code: {product_code}")
-    for key, value in decoded_info.items():
-        st.write(f"{key}: {value}")
-    st.write()
-
-# Create a defaultdict to store the product count for each owner
-owner_product_count = defaultdict(int)
-
-# Create a defaultdict to store the product codes for each owner and product
-owner_product_codes = defaultdict(lambda: defaultdict(list))
-
-# Iterate through the decoded_info_dict in session state
-for product_code, decoded_info in st.session_state.decoded_info_dict.items():
-    owner = decoded_info["Product Owner"]
-    product_number = decoded_info["Product Number"]
-    expiration_date = decoded_info["Expiration Date"]
-    owner_product_codes[owner][product_number].append((product_code, expiration_date))
-
-# Print the results
-for owner, product_codes in owner_product_codes.items():
-    st.write(f"Owner {owner} possesses the following products:")
-    for product_number, codes_and_dates in product_codes.items():
-        for product_code, expiration_date in codes_and_dates:
-            st.write(f"Product {product_number}: Code - {product_code}, Expiration Date - {expiration_date}")
-    st.write()
 
