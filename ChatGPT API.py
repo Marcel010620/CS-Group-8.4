@@ -13,7 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # Initialize the Google Sheets API
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets.readonly']
-creds = ServiceAccountCredentials.from_json_keyfile_name('Marcel010620/CS-Group-8.4/projekt-cs-32b2fba1e1ff.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('Marcel010620/CS-Group-8.4/projekt-cs-32b2fba1e1ff.json', scope)  # might need to change json file path
 client = gspread.authorize(creds)
 sheet = client.open("Database_A").sheet1  # File name of the gsheet 'Database_A
 
@@ -22,7 +22,7 @@ food_items = sheet.col_values(2)  # Adjust if there are changes being made to th
 food_list = ', '.join(food_items)
 
 # OpenAI-API key for ChatGPT setup
-openai.api_key = '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'  # Insert Openai-API key here
+openai.api_key = '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'  # Insert Openai-API key here
 
 # Create prompt for ChatGPT
 prompt = f"Create a recipe using the following ingredients: {food_list}"
@@ -34,7 +34,7 @@ response = openai.Completion.create(
   max_tokens=150
 )
 
-# Print out the recipe
+# Print out recipe
 print(response.choices[0].text)
 
 
