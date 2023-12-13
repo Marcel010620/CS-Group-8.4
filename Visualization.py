@@ -26,6 +26,12 @@ import streamlit as st
 # Define Google Sheets API scopes
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
+# Constants for Google Sheets
+SERVICE_ACCOUNT_FILE = "https://github.com/Marcel010620/CS-Group-8.4/blob/main/projekt-cs-32b2fba1e1ff.json"  # Replace with your service account file path
+SPREADSHEET_ID = "your_spreadsheet_id"  # Replace with your Google Sheets spreadsheet ID
+OWNER_SHEET_NAME = "Owner_Register"  # Replace with the name of your Owner sheet
+INVENTORY_SHEET_NAME = "Fridge_Inventory"  # Replace with the name of your Inventory sheet
+
 # Function to create the credentials and authorize the Google Sheets client
 def authenticate_gspread():
     # Use environment variables for credentials in a cloud environment
