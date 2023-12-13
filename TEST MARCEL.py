@@ -469,3 +469,179 @@ for owner, product_codes in owner_product_codes.items():
         for product_code, expiration_date in codes_and_dates:
             st.write(f"Product {product_number}: Code - {product_code}, Expiration Date - {expiration_date}")
     st.write()
+
+
+
+
+
+
+
+
+
+
+
+
+import streamlit as st
+import pandas as pd
+from datetime import datetime, timedelta
+import random
+import matplotlib.pyplot as plt
+
+# ... (your other imports and code)
+
+# Create a Streamlit app
+st.title('Fridge Overview')
+
+# Sample data for different selections from the second code
+data = {
+    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
+    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
+}
+
+# Ensure there are 15 different articles and 3 owners
+owners = ['A', 'B', 'C']
+data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
+
+# Create a DataFrame with a separate row for each unit
+rows = []
+for i in range(len(data['Article'])):
+    units = data['Quantity'][i]
+    for _ in range(units):
+        row = {
+            'Article': data['Article'][i],
+            'Quantity': 1,  # Count each unit as 1
+            'Owner': data['Owner'][i],
+        }
+        rows.append(row)
+
+df = pd.DataFrame(rows)
+
+# Expand the DataFrame to have one row for each unique combination of Article and Owner
+expanded_df = df.explode('Owner')
+
+# Create a dropdown to select an option
+selected_option = st.selectbox('Select an option:', ['Owner', 'Article'])
+
+# Check the selected option and create the corresponding chart
+if selected_option == 'Owner':
+    chart_df = df.groupby('Owner').size().reset_index(name='Count')
+    x_title, y_title = 'Owner', 'Count'
+
+    # Create a pie chart with Matplotlib
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.pie(chart_df[y_title], labels=chart_df[x_title], autopct='%1.1f%%', startangle=90)
+    ax.set_title(f'Pie Chart - {selected_option}')
+    st.pyplot(fig)
+
+elif selected_option == 'Article':
+    chart_df = expanded_df.groupby('Article').size().reset_index(name='Count')
+    x_title, y_title = 'Article', 'Count'
+
+    # Create a bar chart with Matplotlib
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(chart_df[x_title], chart_df[y_title], color='blue')
+    ax.set_xlabel(x_title)
+    ax.set_ylabel(y_title)
+    ax.set_title(f'Bar Chart - {selected_option}')
+    st.pyplot(fig)
+
+else:
+    # Handle the case where the selected option is neither 'Owner' nor 'Article'
+    st.warning("Invalid option selected. Please choose 'Owner' or 'Article'.")
+
+
+
+
+
+import altair as alt
+import pandas as pd
+import streamlit as st
+import random
+
+# Sample data
+data = {
+    'Article': ['Milk', 'Ham', 'Yogurt', 'Cheese', 'Cream', 'Pepper', 'Sausage', 'Carrots', 'Cucumber', 'Chocolate', 'Cake', 'Butter', 'Apple', 'Strawberries', 'Salad'],
+    'Quantity': [10, 5, 7, 3, 2, 8, 6, 4, 9, 5, 7, 3, 6, 4, 5],
+}
+
+owners = ['A', 'B', 'C']
+data['Owner'] = [random.choice(owners) for _ in range(len(data['Article']))]
+
+df = pd.DataFrame(data)
+
+expanded_df = df.explode('Owner')
+
+# Select option
+selected_option = 'Article'
+
+
+
+
+
+import streamlit as st
+import pandas as pd
+import gspread
+from oauth2client.service_account import Credentials
+import random
+
+# Replace 'YourSheetName' with the actual name of your Google Sheet
+INVENTORY_SHEET_NAME = 'Fridge_Inventory'
+
+# Function to create the credentials and authorize the Google Sheets client
+def authenticate_gspread():
+    # Replace 'path/to/credentials.json' with the path to your Google Sheets API credentials JSON file
+    credentials = Credentials.from_service_account_file('C:\\Users\\marce\\Documents\\Fridge\\projekt-cs-32b2fba1e1ff.json', scopes=['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive'])
+    gc = gspread.authorize(credentials)
+    return gc
+
+# Function to load data from Google Sheets
+def load_data_from_sheet(gc, sheet_name):
+    try:
+        # Open the Google Sheet by name
+        sheet = gc.open(sheet_name)
+        # Get the first (and presumably only) worksheet
+        worksheet = sheet.sheet1
+        # Get all values from the worksheet
+        data = worksheet.get_all_records()
+        return data
+    except gspread.exceptions.SpreadsheetNotFound:
+        st.error(f"Google Sheet '{sheet_name}' not found.")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+
+# Create a Streamlit app
+st.title('Fridge Overview')
+
+# Authenticate and open the Google Sheet
+gc = authenticate_gspread()
+inventory_data = load_data_from_sheet(gc, INVENTORY_SHEET_NAME)
+
+# Sample data for different selections
+data = {
+    'Product name': [row['Product name'] for row in inventory_data],
+    'Quantity': [row['Quantity'] for row in inventory_data],
+}
+
+# Ensure there are 15 different articles and 3 owners
+owners = ['A', 'B', 'C']
+data['Owner'] = [random.choice(owners) for _ in range(len(data['Product name']))]
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Create a DataFrame with a separate row for each unit
+rows = []
+for i in range(len(df)):
+    units = df['Quantity'][i]
+    for _ in range(units):
+        row = {
+            'Product name': df['Product name'][i],
+            'Quantity': 1,  # Count each unit as 1
+            'Owner': df['Owner'][i],
+        }
+        rows.append(row)
+
+expanded_df = pd.DataFrame(rows)
+
+# Display the expanded DataFrame
+st.table(expanded_df)

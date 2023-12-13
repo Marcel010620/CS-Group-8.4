@@ -14,46 +14,32 @@
 
 #### Section 1: Import all relevant libraries ####
 
+import os
+from google.oauth2 import service_account
+import gspread
+import pandas as pd
 from datetime import datetime, timedelta
 import random
-import streamlit as st
-import pandas as pd
-import gspread
-from google.oauth2.service_account import Credentials
 import altair as alt
+import streamlit as st
 
-
-
-#### Section 2: API connection to the database ####
-
-# Initialization of the library and API connection to the database
-# (Path to JSON file, Spreadsheet ID from URL, authentication scope, and name of Google Sheet)
-
-SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-]
-
-SERVICE_ACCOUNT_FILE = (
-    "C:\\Users\\marce\\Documents\\Fridge\\projekt-cs-32b2fba1e1ff.json"
-)
-SPREADSHEET_ID = "1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4"
-OWNER_SHEET_NAME = "Owner_Register"
-INVENTORY_SHEET_NAME = "Fridge_Inventory"
-
-
-#### Section 3: Functions ####
+# Define Google Sheets API scopes
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # Function to create the credentials and authorize the Google Sheets client
 def authenticate_gspread():
-    credentials = Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+    # Use environment variables for credentials in a cloud environment
+    credentials_info = os.environ.get("GOOGLE_SHEETS_CREDENTIALS")
+    credentials = service_account.Credentials.from_service_account_info(
+        credentials_info, scopes=SCOPES
     )
     gc = gspread.authorize(credentials)
     return gc
 
 # Define the Autentication globally so it doesn't have to be mentioned every time
 gc = authenticate_gspread()
+
+
 
 # Function to get the worksheet from the Google Sheets
 def get_worksheet(sheet_name):
