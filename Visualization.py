@@ -26,23 +26,30 @@ import streamlit as st
 # Define Google Sheets API scopes
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-# Constants for Google Sheets
-SERVICE_ACCOUNT_FILE = "C:\\Users\\marce\\Documents\\Fridge\\projekt-cs-32b2fba1e1ff.json"  # Replace with your service account file path
-SPREADSHEET_ID = "1CLDAFhtriXEMnylxTfOqF27-GH5S9hXELq0WCl-8kb4"  # Replace with your Google Sheets spreadsheet ID
-OWNER_SHEET_NAME = "Owner_Register"  # Replace with the name of your Owner sheet
-INVENTORY_SHEET_NAME = "Fridge_Inventory"  # Replace with the name of your Inventory sheet
+# Define Google Sheets API credentials directly in the code
+SERVICE_ACCOUNT_INFO = {
+    "type": "service_account",
+    "project_id": "projekt-cs",
+    "private_key_id": "32b2fba1e1ff5c8b13a83c50d5f3d7bfa6f27477",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDIUF11TpEBbnKz\nq92eLPkQ9hj5dYZCofe3cqfowxK1WvKkWtOoPessaSlgp1Ms9DNL3qNfTL6QJef1\nVKvB/vX/5gI3IrR4WywNiTO/z7ODShsw6qNBJ0C+/Mhe3W6I6zkVFPjep4i8rQR5\nXQFDrku7L6drugfq6Ph1ovj4HklBZfitBrh82Kw49yxFGb2Vv6sWXQkQT4hgCwcq\nPcWhbS8o85jim3rgVx8lndUzgviad9SX/y2qAlUXD6nwyO+6E+DS2HlNGbx/CPbc\n+Bzoiqb7mVeFpBmEIYgpeIO7xn7XZTsvSuQM86jTlWQD2JGsA829OG4/fOAY+AiK\nmhJ515MJAgMBAAECggEACh6kQBBEa1r39LuAplRtj0WtiJG/QwfBdt02HiBXxj12\nX2b+xSO+qSdVaa5+WVmra0Bvxrle8bOWirp4tGPj6+YD8+LfFOr/OF5XdM/iiOYS\nJlgeQAUChHuLCF7drhFbGIVvFrmGQwjnHlX8Yb3REd90EPFMo9mZ7sB5XTiTeRgd\npgX7QVs2ueFJQkJEiTZjcGDL1NLuXOMevwBZRBuKnejJMXwfQQJI2LMVEBQd2zeS\nnvhnwkAMKMyNXodiuwrSrkEaWXvUgK0mSaAt9JLHudkQhArUjs3qG2h+Z7NezS52\n3gvjXUjh/evnbC3uKugX/sF8U0GVZ6OcsMXmXcW30QKBgQDzNqgUrCoDa3e63NPP\n/6gn7QLHjbqd643LlTbVBFY/6z+SkcxRW2UGm4qIW7Q4meyAxrFwGFqfWq12Z7SX\n8Q6WxclDDcXtzdeCHs5hGdHQP+Sj/6yF9/zIoBA9wpY5ISU189J2JiD01pF3F9J9\n/miSfX6oeHE2HYXTjk9Lr3Aw0QKBgQDS2FW+60X9TC/vyPEOIVpL2MaOgzCMaHyG\ny96MSwc9iER4us+qZzjzzbA7U7hLFhzUNyIiEv1IPfAU99To9f0CIvU+TSdoKgFM\nKq0EsSNiHRkfapt9MPcHhFXCflBeuKLaJ28oXfmQgOTujIY/iB/JVnqV3j+3sIBh\nKftWenKMuQKBgDjwb9M/JyrbyxENR+1nLggC3ea4EJuOHQkvasHeHQ8j1SNMTOgz\nHGi6m2knBv9FUfAoFDxpBzZNdVTGHKqBveegcGjpXZA5451L9wcWk19Mxgt6/Pn0\nP9L8XjEHUEIZt2t1JK2SaZ7IaQ/XnOjwWa0KAlAQunhv2vfXVksizIIxAoGBAJxp\nAcr8q9II97Kw5SnvUhXb/QfxiE1Qobg5eqGmcvuRoAHTy4QEyPoLx0VriNai08YW\nFEskvSIfWH+ljhs3iHZSSo3qHGaoaof/TJSjd7UsEtv8cNaBQXAhGqGKpMJvw9eD\n03ElraImDC5urpRovfPVJGETGz+APuxVgW8YrOt5AoGASdY2uNCU7tG1alOq8W4K\nsbrcspBnRVr/1Tev73xqDRLS8ew++2tlvKbrBYbdmBFPub40Dt04bWzIV9Qj9vHw\n2Eke5VbjhL0pQhez3MxT9P0FMiqU/35nNBzM+Vu0Gj+dxqg2r+Qx7E+7P+REkRZV\nWbH9xEDs1XfTAtbyZKWXypo=\n-----END PRIVATE KEY-----\n",
+    "client_email": "cs-projekt@projekt-cs.iam.gserviceaccount.com",
+    "client_id": "117933353454520023198",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cs-projekt%40projekt-cs.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}
 
 # Function to create the credentials and authorize the Google Sheets client
 def authenticate_gspread():
-    # Use environment variables for credentials in a cloud environment
-    credentials_info = os.environ.get("GOOGLE_SHEETS_CREDENTIALS")
     credentials = service_account.Credentials.from_service_account_info(
-        credentials_info, scopes=SCOPES
+        SERVICE_ACCOUNT_INFO, scopes=SCOPES
     )
     gc = gspread.authorize(credentials)
     return gc
 
-# Define the Autentication globally so it doesn't have to be mentioned every time
+# Define the Authentication globally so it doesn't have to be mentioned every time
 gc = authenticate_gspread()
 
 
